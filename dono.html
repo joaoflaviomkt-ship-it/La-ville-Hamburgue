@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Área do Dono 2.1 - Hamburgueria</title>
+
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #121826;
+      --card2: #182033;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --line: rgba(255,255,255,.10);
+      --brand: #ffb703;
+      --brand2: #ef4444;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --orange: #f97316;
+      --radius: 22px;
+    }
+
+    body.theme-red { --brand: #ef4444; --brand2: #7f1d1d; }
+    body.theme-yellow { --brand: #ffb703; --brand2: #ef4444; }
+    body.theme-green { --brand: #22c55e; --brand2: #064e3b; }
+    body.theme-blue { --brand: #38bdf8; --brand2: #1d4ed8; }
+    body.theme-purple { --brand: #a855f7; --brand2: #581c87; }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--brand) 22%, transparent), transparent 28%),
+        radial-gradient(circle at top right, color-mix(in srgb, var(--brand2) 18%, transparent), transparent 25%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+    }
+
+    .login {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: min(460px, 100%);
+      background: rgba(18, 24, 38, .92);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 28px 80px rgba(0,0,0,.35);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5vw, 46px);
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    p, .muted {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px;
+      outline: none;
+    }
+
+    option {
+      background: #111827;
+      color: white;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .18s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn.primary {
+      background: var(--brand);
+      color: #111827;
+      border-color: transparent;
+    }
+
+    .btn.red {
+      background: rgba(239,68,68,.16);
+      border-color: rgba(239,68,68,.35);
+      color: #fecaca;
+    }
+
+    .btn.green {
+      background: rgba(34,197,94,.16);
+      border-color: rgba(34,197,94,.35);
+      color: #bbf7d0;
+    }
+
+    .btn.blue {
+      background: rgba(59,130,246,.16);
+      border-color: rgba(59,130,246,.35);
+      color: #bfdbfe;
+    }
+
+    .app {
+      display: none;
+      grid-template-columns: 290px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 22px;
+      background: rgba(11,15,25,.82);
+      border-right: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+      overflow: hidden;
+      flex: none;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-box strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .brand-box small {
+      color: var(--muted);
+    }
+
+    .version {
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      color: #111827;
+      padding: 13px;
+      border-radius: 18px;
+      font-weight: 950;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .nav {
+      display: grid;
+      gap: 9px;
+    }
+
+    .nav button {
+      text-align: left;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.045);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .nav button.active {
+      background: var(--brand);
+      color: #111827;
+      border-color: transparent;
+    }
+
+    .logout {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    main {
+      padding: 26px;
+      overflow: hidden;
+    }
+
+    .mobile-nav {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(11,15,25,.92);
+      border-bottom: 1px solid var(--line);
+      padding: 12px;
+      backdrop-filter: blur(18px);
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .clock {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+      border-radius: 999px;
+      padding: 11px 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .notice {
+      background: rgba(255,183,3,.14);
+      border: 1px solid rgba(255,183,3,.35);
+      color: #fde68a;
+      padding: 14px;
+      border-radius: 18px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: rgba(18, 24, 38, .86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 27px;
+      margin-top: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .filter.active {
+      background: var(--brand);
+      color: #111827;
+      border-color: transparent;
+    }
+
+    .orders, .products, .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .order, .product, .row-item {
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .product {
+      grid-template-columns: 92px 1fr auto;
+      align-items: center;
+    }
+
+    .photo, .preview, .logo-preview {
+      width: 92px;
+      height: 92px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-size: 40px;
+      border: 1px solid var(--line);
+    }
+
+    .preview {
+      width: 130px;
+      height: 100px;
+      color: var(--muted);
+      font-size: 13px;
+      background: rgba(255,255,255,.04);
+      border-style: dashed;
+    }
+
+    .logo-preview {
+      background: rgba(255,255,255,.04);
+      border-style: dashed;
+      font-size: 32px;
+    }
+
+    .photo img, .preview img, .logo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .actions {
+      display: grid;
+      gap: 8px;
+      min-width: 180px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 950;
+      color: #fff;
+      margin-left: 6px;
+    }
+
+    .Novo { background: var(--blue); }
+    .Preparando { background: var(--purple); }
+    .Pronto { background: var(--orange); color: #111827; }
+    .Saiu { background: #06b6d4; color: #111827; }
+    .Entregue { background: var(--green); }
+    .Cancelado { background: var(--red); }
+
+    .badge {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid var(--line);
+    }
+
+    .badge.green {
+      color: #bbf7d0;
+      border-color: rgba(34,197,94,.35);
+      background: rgba(34,197,94,.12);
+    }
+
+    .badge.red {
+      color: #fecaca;
+      border-color: rgba(239,68,68,.35);
+      background: rgba(239,68,68,.12);
+    }
+
+    .theme-options {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .theme-btn {
+      height: 64px;
+      border-radius: 18px;
+      border: 2px solid var(--line);
+      cursor: pointer;
+    }
+
+    .theme-btn.active {
+      border-color: #fff;
+      box-shadow: 0 0 0 4px rgba(255,255,255,.12);
+    }
+
+    .t-yellow { background: linear-gradient(135deg, #ffb703, #ef4444); }
+    .t-red { background: linear-gradient(135deg, #ef4444, #7f1d1d); }
+    .t-green { background: linear-gradient(135deg, #22c55e, #064e3b); }
+    .t-blue { background: linear-gradient(135deg, #38bdf8, #1d4ed8); }
+    .t-purple { background: linear-gradient(135deg, #a855f7, #581c87); }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--brand);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .finance-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .finance-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.035);
+      font-weight: 900;
+    }
+
+    .finance-line span:first-child {
+      color: var(--muted);
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.62);
+      z-index: 30;
+      display: none;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .modal-bg.open {
+      display: grid;
+    }
+
+    .modal {
+      width: min(760px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      background: #121826;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: 0 35px 90px rgba(0,0,0,.40);
+    }
+
+    .modal-head {
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .modal-body {
+      padding: 18px;
+    }
+
+    .close {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: block;
+      }
+
+      main {
+        padding: 18px;
+      }
+
+      .stats, .grid-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .top, .order, .row-item {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+
+      .stats, .grid-3, .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product {
+        grid-template-columns: 74px 1fr;
+      }
+
+      .photo {
+        width: 74px;
+        height: 74px;
+        font-size: 32px;
+      }
+
+      .product .actions {
+        grid-column: 1 / -1;
+      }
+
+      .actions {
+        min-width: 0;
+      }
+
+      .theme-options {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body class="theme-yellow">
+  <section id="login" class="login">
+    <div class="login-card">
+      <h1>Área do Dono 2.1</h1>
+      <p>Agora com visual personalizável, logo, estoque, taxa de entrega, loja aberta/fechada, edição de produtos, combos e adicionais.</p>
+
+      <label>Senha do dono</label>
+      <input id="password" type="password" placeholder="Digite a senha" style="margin-bottom: 14px;">
+
+      <button class="btn primary" style="width: 100%;" onclick="login()">Entrar</button>
+      <p style="font-size: 13px;">Senha demo: <strong>dono123</strong></p>
+    </div>
+  </section>
+
+  <section id="app" class="app">
+    <aside class="sidebar">
+      <div class="brand-box">
+        <div id="sideLogo" class="logo">🍔</div>
+        <div>
+          <strong id="sideName">BurgerPro Dono</strong>
+          <small>Painel completo</small>
+        </div>
+      </div>
+
+      <div class="version">PAINEL DO DONO 2.1</div>
+
+      <nav class="nav">
+        <button id="nav-dashboard" class="active" onclick="showPage('dashboard')">📊 Dashboard</button>
+        <button id="nav-pedidos" onclick="showPage('pedidos')">🧾 Pedidos</button>
+        <button id="nav-faturamento" onclick="showPage('faturamento')">💰 Faturamento</button>
+        <button id="nav-produtos" onclick="showPage('produtos')">🍔 Produtos</button>
+        <button id="nav-combos" onclick="showPage('combos')">🎁 Combos</button>
+        <button id="nav-adicionais" onclick="showPage('adicionais')">➕ Adicionais</button>
+        <button id="nav-estoque" onclick="showPage('estoque')">📦 Estoque</button>
+        <button id="nav-config" onclick="showPage('config')">⚙️ Configurações</button>
+        <button id="nav-visual" onclick="showPage('visual')">🎨 Visual</button>
+      </nav>
+
+      <button class="btn red logout" onclick="logout()">Sair do painel</button>
+    </aside>
+
+    <div class="mobile-nav">
+      <select onchange="showPage(this.value)">
+        <option value="dashboard">📊 Dashboard</option>
+        <option value="pedidos">🧾 Pedidos</option>
+        <option value="faturamento">💰 Faturamento</option>
+        <option value="produtos">🍔 Produtos</option>
+        <option value="combos">🎁 Combos</option>
+        <option value="adicionais">➕ Adicionais</option>
+        <option value="estoque">📦 Estoque</option>
+        <option value="config">⚙️ Configurações</option>
+        <option value="visual">🎨 Visual</option>
+      </select>
+    </div>
+
+    <main>
+      <section class="top">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Resumo geral da hamburgueria.</p>
+        </div>
+        <div class="clock" id="clock">--:--</div>
+      </section>
+
+      <section id="page-dashboard" class="page active">
+        <div id="statusNotice" class="notice"></div>
+
+        <div class="stats">
+          <div class="card stat"><span>Faturamento hoje</span><strong id="statRevenue">R$ 0,00</strong></div>
+          <div class="card stat"><span>Pedidos hoje</span><strong id="statOrders">0</strong></div>
+          <div class="card stat"><span>Ticket médio</span><strong id="statTicket">R$ 0,00</strong></div>
+          <div class="card stat"><span>Pedidos abertos</span><strong id="statOpen">0</strong></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h2>Últimos pedidos</h2>
+            <div id="latestOrders" class="orders"></div>
+          </div>
+
+          <div class="card">
+            <h2>Ações rápidas</h2>
+            <div class="grid-2">
+              <button class="btn primary" onclick="showPage('produtos')">Cadastrar produto</button>
+              <button class="btn blue" onclick="showPage('estoque')">Controle de estoque</button>
+              <button class="btn green" onclick="toggleStoreStatus()">Abrir/fechar loja</button>
+              <button class="btn red" onclick="clearFinishedOrders()">Limpar finalizados</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-pedidos" class="page">
+        <div class="notice">Aqui o dono vê valores e faturamento. Funcionários não devem acessar esta área.</div>
+        <div id="filters" class="filters"></div>
+        <button class="btn red" onclick="clearFinishedOrders()" style="margin-bottom: 14px;">Limpar pedidos finalizados</button>
+        <div id="ordersList" class="orders"></div>
+      </section>
+
+      <section id="page-faturamento" class="page">
+        <div class="notice">
+          Área exclusiva do dono. Aqui ficam os valores, formas de pagamento e relatórios de faturamento.
+        </div>
+
+        <div class="stats">
+          <div class="card stat"><span>Faturamento hoje</span><strong id="financeToday">R$ 0,00</strong></div>
+          <div class="card stat"><span>Faturamento semana</span><strong id="financeWeek">R$ 0,00</strong></div>
+          <div class="card stat"><span>Faturamento mês</span><strong id="financeMonth">R$ 0,00</strong></div>
+          <div class="card stat"><span>Total geral</span><strong id="financeTotal">R$ 0,00</strong></div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:16px;">
+          <div class="card">
+            <h2>Vendas por forma de pagamento</h2>
+            <div id="paymentSummary" class="finance-box"></div>
+          </div>
+
+          <div class="card">
+            <h2>Filtrar faturamento</h2>
+            <div class="form-grid">
+              <div>
+                <label>Data inicial</label>
+                <input id="financeStart" type="date">
+              </div>
+
+              <div>
+                <label>Data final</label>
+                <input id="financeEnd" type="date">
+              </div>
+
+              <div class="full">
+                <button class="btn primary" onclick="renderFinance()">Filtrar</button>
+                <button class="btn blue" onclick="exportFinanceCSV()" type="button">Exportar CSV</button>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;" class="finance-box">
+              <div class="finance-line">
+                <span>Total no período</span>
+                <strong id="financePeriodTotal">R$ 0,00</strong>
+              </div>
+              <div class="finance-line">
+                <span>Pedidos no período</span>
+                <strong id="financePeriodOrders">0</strong>
+              </div>
+              <div class="finance-line">
+                <span>Ticket médio</span>
+                <strong id="financePeriodTicket">R$ 0,00</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Detalhamento de pedidos pagos</h2>
+          <div id="financeTable"></div>
+        </div>
+      </section>
+
+      <section id="page-produtos" class="page">
+        <div class="card" style="margin-bottom: 16px;">
+          <h2>Cadastrar produto com imagem</h2>
+
+          <form class="form-grid" onsubmit="addProduct(event)">
+            <div>
+              <label>Nome</label>
+              <input name="name" required placeholder="Ex: Smash Bacon">
+            </div>
+
+            <div>
+              <label>Preço</label>
+              <input name="price" required type="number" step="0.01" placeholder="29.90">
+            </div>
+
+            <div>
+              <label>Categoria</label>
+              <input name="category" required placeholder="Mais pedidos, Bebidas, Porções...">
+            </div>
+
+            <div>
+              <label>Emoji reserva</label>
+              <input name="emoji" placeholder="🍔">
+            </div>
+
+            <div class="full">
+              <label>Descrição</label>
+              <textarea name="description" rows="3" required placeholder="Ingredientes e detalhes"></textarea>
+            </div>
+
+            <div>
+              <label>Imagem</label>
+              <input type="file" accept="image/*" onchange="previewProductImage(event)">
+            </div>
+
+            <div>
+              <label>Prévia</label>
+              <div id="productPreview" class="preview">Sem imagem</div>
+            </div>
+
+            <div class="full">
+              <button class="btn primary" type="submit">Adicionar produto</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="productsList" class="products"></div>
+      </section>
+
+      <section id="page-combos" class="page">
+        <div class="card" style="margin-bottom: 16px;">
+          <h2>Cadastrar combo</h2>
+
+          <form class="form-grid" onsubmit="addCombo(event)">
+            <div>
+              <label>Nome do combo</label>
+              <input name="name" required placeholder="Ex: Combo Casal">
+            </div>
+
+            <div>
+              <label>Preço</label>
+              <input name="price" required type="number" step="0.01" placeholder="69.90">
+            </div>
+
+            <div class="full">
+              <label>Descrição</label>
+              <textarea name="description" rows="3" required placeholder="Ex: 2 burgers + batata + 2 refrigerantes"></textarea>
+            </div>
+
+            <div class="full">
+              <button class="btn primary" type="submit">Cadastrar combo</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="comboList" class="list"></div>
+      </section>
+
+      <section id="page-adicionais" class="page">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Cadastrar adicional</h2>
+            <form class="form-grid" onsubmit="addExtra(event)">
+              <div>
+                <label>Nome</label>
+                <input name="name" required placeholder="Ex: Bacon extra">
+              </div>
+
+              <div>
+                <label>Preço</label>
+                <input name="price" required type="number" step="0.01" placeholder="5.00">
+              </div>
+
+              <div class="full">
+                <button class="btn primary" type="submit">Adicionar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2>Adicionais cadastrados</h2>
+            <div id="extrasList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-estoque" class="page">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Cadastrar item no estoque</h2>
+
+            <form class="form-grid" onsubmit="addStock(event)">
+              <div>
+                <label>Item</label>
+                <input name="name" required placeholder="Ex: Pão brioche">
+              </div>
+
+              <div>
+                <label>Quantidade</label>
+                <input name="qty" required type="number" step="1" placeholder="50">
+              </div>
+
+              <div>
+                <label>Quantidade mínima</label>
+                <input name="min" required type="number" step="1" placeholder="10">
+              </div>
+
+              <div>
+                <label>Unidade</label>
+                <input name="unit" placeholder="un, kg, pct">
+              </div>
+
+              <div class="full">
+                <button class="btn primary" type="submit">Adicionar no estoque</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2>Estoque atual</h2>
+            <div id="stockList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-config" class="page">
+        <div class="card">
+          <h2>Configurações da hamburgueria</h2>
+
+          <form class="form-grid" onsubmit="saveStoreSettings(event)">
+            <div>
+              <label>Nome da hamburgueria</label>
+              <input id="storeName" required placeholder="Ex: La Ville Hamburgueria">
+            </div>
+
+            <div>
+              <label>Slogan</label>
+              <input id="storeSlogan" placeholder="Ex: Hambúrguer artesanal feito com amor">
+            </div>
+
+            <div>
+              <label>WhatsApp</label>
+              <input id="storeWhatsapp" placeholder="5531999999999">
+            </div>
+
+            <div>
+              <label>Taxa de entrega</label>
+              <input id="deliveryFee" type="number" step="0.01" placeholder="5.00">
+            </div>
+
+            <div>
+              <label>Pedido mínimo</label>
+              <input id="minOrder" type="number" step="0.01" placeholder="20.00">
+            </div>
+
+            <div>
+              <label>Tempo de entrega</label>
+              <input id="deliveryTime" placeholder="35–50 min">
+            </div>
+
+            <div class="full">
+              <button class="btn green" type="button" onclick="toggleStoreStatus()">Alterar status aberto/fechado</button>
+              <p id="storeStatusText"></p>
+            </div>
+
+            <div>
+              <label>Logo da hamburgueria</label>
+              <input type="file" accept="image/*" onchange="previewLogo(event)">
+            </div>
+
+            <div>
+              <label>Prévia da logo</label>
+              <div id="logoPreview" class="logo-preview">🍔</div>
+            </div>
+
+            <div class="full">
+              <button class="btn primary" type="submit">Salvar configurações</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="page-visual" class="page">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Alterar visual do painel</h2>
+            <p>Escolha a cor principal do painel do dono.</p>
+
+            <div class="theme-options">
+              <button class="theme-btn t-yellow" onclick="setTheme('yellow')"></button>
+              <button class="theme-btn t-red" onclick="setTheme('red')"></button>
+              <button class="theme-btn t-green" onclick="setTheme('green')"></button>
+              <button class="theme-btn t-blue" onclick="setTheme('blue')"></button>
+              <button class="theme-btn t-purple" onclick="setTheme('purple')"></button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Visual atual</h2>
+            <p>Tema selecionado: <strong id="themeName">Amarelo</strong></p>
+            <p>Nome e logo são alterados na aba <strong>Configurações</strong>.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <section id="editModal" class="modal-bg">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h2>Editar produto</h2>
+          <p style="margin: 6px 0 0;">Altere nome, preço, descrição, categoria e imagem.</p>
+        </div>
+        <button class="close" onclick="closeEditProduct()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form class="form-grid" onsubmit="saveProductEdit(event)">
+          <input id="editId" type="hidden">
+
+          <div>
+            <label>Nome</label>
+            <input id="editName" required>
+          </div>
+
+          <div>
+            <label>Preço</label>
+            <input id="editPrice" required type="number" step="0.01">
+          </div>
+
+          <div>
+            <label>Categoria</label>
+            <input id="editCategory" required>
+          </div>
+
+          <div>
+            <label>Emoji</label>
+            <input id="editEmoji">
+          </div>
+
+          <div class="full">
+            <label>Descrição</label>
+            <textarea id="editDescription" required rows="3"></textarea>
+          </div>
+
+          <div>
+            <label>Nova imagem</label>
+            <input type="file" accept="image/*" onchange="previewEditImage(event)">
+          </div>
+
+          <div>
+            <label>Prévia</label>
+            <div id="editPreview" class="preview">Sem imagem</div>
+          </div>
+
+          <div class="full">
+            <button class="btn primary" type="submit">Salvar edição</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const PRODUCTS_KEY = "burgerpro_products_v4";
+    const ORDERS_KEY = "burgerpro_orders_v4";
+    const SETTINGS_KEY = "burgerpro_store_settings_v4";
+    const STOCK_KEY = "burgerpro_stock_v4";
+    const EXTRAS_KEY = "burgerpro_extras_v4";
+    const AUTH_KEY = "burgerpro_owner_auth_v4";
+
+    const defaultProducts = [
+      { id: "p1", name: "Smash Classic", category: "Mais pedidos", description: "Pão brioche, 2 smash burgers, cheddar, picles e molho especial.", price: 29.90, emoji: "🍔", image: "", available: true },
+      { id: "p2", name: "Bacon Crispy", category: "Mais pedidos", description: "Burger artesanal, cheddar cremoso, bacon crocante e barbecue.", price: 34.90, emoji: "🥓", image: "", available: true },
+      { id: "p3", name: "Combo Casal", category: "Combos", description: "2 Smash Classic, 1 batata grande e 2 refrigerantes lata.", price: 72.90, emoji: "🎁", image: "", available: true, type: "combo" }
+    ];
+
+    const defaultSettings = {
+      storeName: "BurgerPro Dono",
+      slogan: "Hambúrguer artesanal feito com amor",
+      whatsapp: "5531999999999",
+      deliveryFee: 0,
+      minOrder: 20,
+      deliveryTime: "35–50 min",
+      isOpen: true,
+      logo: "",
+      theme: "yellow"
+    };
+
+    let currentFilter = "Todos";
+    let selectedProductImage = "";
+    let selectedLogoImage = "";
+    let selectedEditImage = "";
+
+    function money(value) {
+      return Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function uid(prefix) {
+      return prefix + "_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+    }
+
+    function getProducts() {
+      const data = localStorage.getItem(PRODUCTS_KEY);
+      if (!data) {
+        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(defaultProducts));
+        return defaultProducts;
+      }
+      return JSON.parse(data);
+    }
+
+    function saveProducts(data) {
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data));
+    }
+
+    function getOrders() {
+      return JSON.parse(localStorage.getItem(ORDERS_KEY) || "[]");
+    }
+
+    function saveOrders(data) {
+      localStorage.setItem(ORDERS_KEY, JSON.stringify(data));
+    }
+
+    function getSettings() {
+      const data = localStorage.getItem(SETTINGS_KEY);
+      if (!data) {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(defaultSettings));
+        return defaultSettings;
+      }
+      return { ...defaultSettings, ...JSON.parse(data) };
+    }
+
+    function saveSettings(data) {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
+    }
+
+    function getStock() {
+      return JSON.parse(localStorage.getItem(STOCK_KEY) || "[]");
+    }
+
+    function saveStock(data) {
+      localStorage.setItem(STOCK_KEY, JSON.stringify(data));
+    }
+
+    function getExtras() {
+      return JSON.parse(localStorage.getItem(EXTRAS_KEY) || "[]");
+    }
+
+    function saveExtras(data) {
+      localStorage.setItem(EXTRAS_KEY, JSON.stringify(data));
+    }
+
+    function login() {
+      const password = document.getElementById("password").value;
+      if (password === "dono123") {
+        localStorage.setItem(AUTH_KEY, "true");
+        openApp();
+      } else {
+        alert("Senha incorreta. Senha demo: dono123");
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem(AUTH_KEY);
+      document.getElementById("login").style.display = "grid";
+      document.getElementById("app").style.display = "none";
+    }
+
+    function openApp() {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("app").style.display = "grid";
+      applySettings();
+      renderAll();
+    }
+
+    function showPage(page) {
+      document.querySelectorAll(".page").forEach(el => el.classList.remove("active"));
+      document.getElementById("page-" + page).classList.add("active");
+
+      document.querySelectorAll(".nav button").forEach(el => el.classList.remove("active"));
+      const nav = document.getElementById("nav-" + page);
+      if (nav) nav.classList.add("active");
+
+      const titles = {
+        dashboard: ["Dashboard", "Resumo geral da hamburgueria."],
+        pedidos: ["Pedidos", "Controle completo dos pedidos e valores."],
+        faturamento: ["Faturamento", "Relatórios financeiros, formas de pagamento e vendas por período."],
+        produtos: ["Produtos", "Cadastre, edite, desative e coloque imagens nos produtos."],
+        combos: ["Combos", "Crie combos promocionais para o cardápio."],
+        adicionais: ["Adicionais", "Cadastre adicionais para vender junto dos hambúrgueres."],
+        estoque: ["Estoque", "Controle ingredientes e alerta de estoque baixo."],
+        config: ["Configurações", "Nome, logo, WhatsApp, taxa de entrega e status da loja."],
+        visual: ["Visual", "Personalize as cores do painel do dono."]
+      };
+
+      document.getElementById("pageTitle").textContent = titles[page][0];
+      document.getElementById("pageSubtitle").textContent = titles[page][1];
+
+      renderAll();
+    }
+
+    function renderClock() {
+      document.getElementById("clock").textContent = new Date().toLocaleString("pt-BR", {
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function statusClass(status) {
+      if (status === "Saiu para entrega") return "Saiu";
+      return String(status || "Novo").replaceAll(" ", "");
+    }
+
+    function nextStatus(status) {
+      if (status === "Novo") return "Preparando";
+      if (status === "Preparando") return "Pronto";
+      if (status === "Pronto") return "Saiu para entrega";
+      if (status === "Saiu para entrega") return "Entregue";
+      return "Entregue";
+    }
+
+    function updateStatus(orderId, status) {
+      const orders = getOrders();
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+      order.status = status;
+      saveOrders(orders);
+      renderAll();
+    }
+
+    function deleteOrder(orderId) {
+      if (!confirm("Deseja excluir este pedido?")) return;
+      saveOrders(getOrders().filter(o => o.id !== orderId));
+      renderAll();
+    }
+
+    function clearFinishedOrders() {
+      if (!confirm("Limpar pedidos entregues/finalizados/cancelados?")) return;
+      const orders = getOrders().filter(o => !["Entregue", "Finalizado", "Cancelado"].includes(o.status));
+      saveOrders(orders);
+      renderAll();
+      alert("Pedidos finalizados foram limpos.");
+    }
+
+    function renderStats() {
+      const orders = getOrders();
+      const today = new Date().toISOString().slice(0, 10);
+      const todayOrders = orders.filter(o => o.createdAt && o.createdAt.slice(0, 10) === today);
+      const valid = todayOrders.filter(o => o.status !== "Cancelado");
+      const revenue = valid.reduce((sum, o) => sum + Number(o.total || 0), 0);
+      const ticket = valid.length ? revenue / valid.length : 0;
+      const open = orders.filter(o => !["Entregue", "Finalizado", "Cancelado"].includes(o.status)).length;
+
+      document.getElementById("statRevenue").textContent = money(revenue);
+      document.getElementById("statOrders").textContent = todayOrders.length;
+      document.getElementById("statTicket").textContent = money(ticket);
+      document.getElementById("statOpen").textContent = open;
+    }
+
+    function orderCard(order) {
+      return `
+        <article class="order">
+          <div>
+            <h3>Pedido #${order.number || "-"} <span class="status ${statusClass(order.status)}">${order.status || "Novo"}</span></h3>
+            <p><strong>${order.customerName || "Cliente"}</strong> • ${order.phone || "Sem telefone"}</p>
+            <p>${(order.items || []).map(i => `${i.qty}x ${i.name}`).join(" • ")}</p>
+            <p><strong>Total:</strong> ${money(order.total)} • <strong>Pagamento:</strong> ${order.payment || "-"}</p>
+            <p><strong>${order.deliveryType || "Pedido"}:</strong> ${order.address || "Retirada no balcão"}</p>
+            ${order.notes ? `<p><strong>Obs:</strong> ${order.notes}</p>` : ""}
+            <p class="muted">${order.createdAt ? new Date(order.createdAt).toLocaleString("pt-BR") : ""}</p>
+          </div>
+          <div class="actions">
+            <select onchange="updateStatus('${order.id}', this.value)">
+              ${["Novo", "Preparando", "Pronto", "Saiu para entrega", "Entregue", "Cancelado"].map(s => `
+                <option value="${s}" ${order.status === s ? "selected" : ""}>${s}</option>
+              `).join("")}
+            </select>
+            <button class="btn green" onclick="updateStatus('${order.id}', '${nextStatus(order.status)}')">Avançar status</button>
+            <button class="btn red" onclick="deleteOrder('${order.id}')">Excluir</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderDashboard() {
+      const settings = getSettings();
+
+      document.getElementById("statusNotice").innerHTML = settings.isOpen
+        ? `🟢 <strong>Loja aberta:</strong> clientes podem fazer pedidos. Taxa de entrega: <strong>${money(settings.deliveryFee)}</strong>.`
+        : `🔴 <strong>Loja fechada:</strong> altere o status em Configurações para receber pedidos.`;
+
+      const latest = getOrders().slice(0, 4);
+      document.getElementById("latestOrders").innerHTML = latest.length
+        ? latest.map(orderCard).join("")
+        : `<div class="empty">Nenhum pedido recebido ainda.</div>`;
+    }
+
+    function renderFilters() {
+      const filters = ["Todos", "Novo", "Preparando", "Pronto", "Saiu para entrega", "Entregue", "Cancelado"];
+      document.getElementById("filters").innerHTML = filters.map(f => `
+        <button class="btn filter ${currentFilter === f ? "active" : ""}" onclick="setFilter('${f}')">${f}</button>
+      `).join("");
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      renderFilters();
+      renderOrders();
+    }
+
+    function renderOrders() {
+      let orders = getOrders();
+      if (currentFilter !== "Todos") orders = orders.filter(o => o.status === currentFilter);
+      document.getElementById("ordersList").innerHTML = orders.length
+        ? orders.map(orderCard).join("")
+        : `<div class="empty">Nenhum pedido encontrado.</div>`;
+    }
+
+    function previewProductImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        selectedProductImage = e.target.result;
+        document.getElementById("productPreview").innerHTML = `<img src="${selectedProductImage}">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function productPhoto(product) {
+      if (product.image) return `<img src="${product.image}" alt="${product.name}">`;
+      return product.emoji || "🍔";
+    }
+
+    function addProduct(event) {
+      event.preventDefault();
+
+      const data = new FormData(event.target);
+      const products = getProducts();
+
+      products.unshift({
+        id: uid("produto"),
+        name: data.get("name"),
+        category: data.get("category"),
+        description: data.get("description"),
+        price: Number(data.get("price")),
+        emoji: data.get("emoji") || "🍔",
+        image: selectedProductImage,
+        available: true
+      });
+
+      saveProducts(products);
+      selectedProductImage = "";
+      event.target.reset();
+      document.getElementById("productPreview").innerHTML = "Sem imagem";
+      renderProducts();
+      alert("Produto adicionado.");
+    }
+
+    function renderProducts() {
+      const products = getProducts();
+
+      document.getElementById("productsList").innerHTML = products.length ? products.map(p => `
+        <article class="product">
+          <div class="photo">${productPhoto(p)}</div>
+          <div>
+            <h3>${p.name}</h3>
+            <p>${p.category} • ${money(p.price)} • ${p.available ? "Disponível" : "Indisponível"}</p>
+            <p>${p.description}</p>
+          </div>
+          <div class="actions">
+            <button class="btn blue" onclick="openEditProduct('${p.id}')">Editar</button>
+            <button class="btn ${p.available ? "" : "primary"}" onclick="toggleProduct('${p.id}')">${p.available ? "Desativar" : "Ativar"}</button>
+            <button class="btn red" onclick="removeProduct('${p.id}')">Remover</button>
+          </div>
+        </article>
+      `).join("") : `<div class="empty">Nenhum produto cadastrado.</div>`;
+    }
+
+    function toggleProduct(id) {
+      const products = getProducts();
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+      product.available = !product.available;
+      saveProducts(products);
+      renderProducts();
+      renderCombos();
+    }
+
+    function removeProduct(id) {
+      if (!confirm("Remover este produto?")) return;
+      saveProducts(getProducts().filter(p => p.id !== id));
+      renderProducts();
+      renderCombos();
+    }
+
+    function openEditProduct(id) {
+      const product = getProducts().find(p => p.id === id);
+      if (!product) return;
+
+      selectedEditImage = product.image || "";
+
+      document.getElementById("editId").value = product.id;
+      document.getElementById("editName").value = product.name;
+      document.getElementById("editPrice").value = product.price;
+      document.getElementById("editCategory").value = product.category;
+      document.getElementById("editEmoji").value = product.emoji || "";
+      document.getElementById("editDescription").value = product.description;
+      document.getElementById("editPreview").innerHTML = product.image ? `<img src="${product.image}">` : (product.emoji || "🍔");
+
+      document.getElementById("editModal").classList.add("open");
+    }
+
+    function closeEditProduct() {
+      document.getElementById("editModal").classList.remove("open");
+    }
+
+    function previewEditImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        selectedEditImage = e.target.result;
+        document.getElementById("editPreview").innerHTML = `<img src="${selectedEditImage}">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveProductEdit(event) {
+      event.preventDefault();
+
+      const id = document.getElementById("editId").value;
+      const products = getProducts();
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      product.name = document.getElementById("editName").value;
+      product.price = Number(document.getElementById("editPrice").value);
+      product.category = document.getElementById("editCategory").value;
+      product.emoji = document.getElementById("editEmoji").value || "🍔";
+      product.description = document.getElementById("editDescription").value;
+      product.image = selectedEditImage;
+
+      saveProducts(products);
+      closeEditProduct();
+      renderProducts();
+      renderCombos();
+      alert("Produto editado.");
+    }
+
+    function addCombo(event) {
+      event.preventDefault();
+
+      const data = new FormData(event.target);
+      const products = getProducts();
+
+      products.unshift({
+        id: uid("combo"),
+        name: data.get("name"),
+        category: "Combos",
+        description: data.get("description"),
+        price: Number(data.get("price")),
+        emoji: "🎁",
+        image: "",
+        available: true,
+        type: "combo"
+      });
+
+      saveProducts(products);
+      event.target.reset();
+      renderCombos();
+      renderProducts();
+      alert("Combo cadastrado.");
+    }
+
+    function renderCombos() {
+      const combos = getProducts().filter(p => p.type === "combo" || String(p.category || "").toLowerCase().includes("combo"));
+
+      document.getElementById("comboList").innerHTML = combos.length ? combos.map(c => `
+        <article class="row-item">
+          <div>
+            <h3>${c.emoji || "🎁"} ${c.name}</h3>
+            <p>${c.description}</p>
+            <p><strong>${money(c.price)}</strong> • ${c.available ? "Disponível" : "Indisponível"}</p>
+          </div>
+          <div class="actions">
+            <button class="btn blue" onclick="openEditProduct('${c.id}')">Editar</button>
+            <button class="btn ${c.available ? "" : "primary"}" onclick="toggleProduct('${c.id}')">${c.available ? "Desativar" : "Ativar"}</button>
+          </div>
+        </article>
+      `).join("") : `<div class="empty">Nenhum combo cadastrado.</div>`;
+    }
+
+    function addExtra(event) {
+      event.preventDefault();
+
+      const data = new FormData(event.target);
+      const extras = getExtras();
+
+      extras.unshift({
+        id: uid("extra"),
+        name: data.get("name"),
+        price: Number(data.get("price")),
+        available: true
+      });
+
+      saveExtras(extras);
+      event.target.reset();
+      renderExtras();
+    }
+
+    function toggleExtra(id) {
+      const extras = getExtras();
+      const extra = extras.find(e => e.id === id);
+      if (!extra) return;
+      extra.available = !extra.available;
+      saveExtras(extras);
+      renderExtras();
+    }
+
+    function removeExtra(id) {
+      if (!confirm("Remover adicional?")) return;
+      saveExtras(getExtras().filter(e => e.id !== id));
+      renderExtras();
+    }
+
+    function renderExtras() {
+      const extras = getExtras();
+
+      document.getElementById("extrasList").innerHTML = extras.length ? extras.map(e => `
+        <article class="row-item">
+          <div>
+            <h3>${e.name}</h3>
+            <p>${money(e.price)} • ${e.available ? "Disponível" : "Indisponível"}</p>
+          </div>
+          <div class="actions">
+            <button class="btn ${e.available ? "" : "primary"}" onclick="toggleExtra('${e.id}')">${e.available ? "Desativar" : "Ativar"}</button>
+            <button class="btn red" onclick="removeExtra('${e.id}')">Remover</button>
+          </div>
+        </article>
+      `).join("") : `<div class="empty">Nenhum adicional cadastrado.</div>`;
+    }
+
+    function addStock(event) {
+      event.preventDefault();
+
+      const data = new FormData(event.target);
+      const stock = getStock();
+
+      stock.unshift({
+        id: uid("stock"),
+        name: data.get("name"),
+        qty: Number(data.get("qty")),
+        min: Number(data.get("min")),
+        unit: data.get("unit") || "un"
+      });
+
+      saveStock(stock);
+      event.target.reset();
+      renderStock();
+    }
+
+    function updateStock(id, qty) {
+      const stock = getStock();
+      const item = stock.find(s => s.id === id);
+      if (!item) return;
+      item.qty = Number(qty);
+      saveStock(stock);
+      renderStock();
+    }
+
+    function removeStock(id) {
+      if (!confirm("Remover item do estoque?")) return;
+      saveStock(getStock().filter(s => s.id !== id));
+      renderStock();
+    }
+
+    function renderStock() {
+      const stock = getStock();
+
+      document.getElementById("stockList").innerHTML = stock.length ? stock.map(s => {
+        const low = s.qty <= s.min;
+        return `
+          <article class="row-item">
+            <div>
+              <h3>${s.name}</h3>
+              <p>
+                Quantidade: <strong>${s.qty} ${s.unit}</strong> • Mínimo: ${s.min} ${s.unit}
+                ${low ? `<span class="badge red">Estoque baixo</span>` : `<span class="badge green">Ok</span>`}
+              </p>
+            </div>
+            <div class="actions">
+              <input type="number" value="${s.qty}" onchange="updateStock('${s.id}', this.value)">
+              <button class="btn red" onclick="removeStock('${s.id}')">Remover</button>
+            </div>
+          </article>
+        `;
+      }).join("") : `<div class="empty">Nenhum item cadastrado no estoque.</div>`;
+    }
+
+    function previewLogo(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        selectedLogoImage = e.target.result;
+        document.getElementById("logoPreview").innerHTML = `<img src="${selectedLogoImage}">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveStoreSettings(event) {
+      event.preventDefault();
+
+      const settings = getSettings();
+
+      settings.storeName = document.getElementById("storeName").value;
+      settings.slogan = document.getElementById("storeSlogan").value;
+      settings.whatsapp = document.getElementById("storeWhatsapp").value;
+      settings.deliveryFee = Number(document.getElementById("deliveryFee").value || 0);
+      settings.minOrder = Number(document.getElementById("minOrder").value || 0);
+      settings.deliveryTime = document.getElementById("deliveryTime").value;
+
+      if (selectedLogoImage) settings.logo = selectedLogoImage;
+
+      saveSettings(settings);
+      selectedLogoImage = "";
+      applySettings();
+      renderAll();
+      alert("Configurações salvas.");
+    }
+
+    function toggleStoreStatus() {
+      const settings = getSettings();
+      settings.isOpen = !settings.isOpen;
+      saveSettings(settings);
+      applySettings();
+      renderDashboard();
+    }
+
+    function setTheme(theme) {
+      const settings = getSettings();
+      settings.theme = theme;
+      saveSettings(settings);
+      applySettings();
+    }
+
+    function applySettings() {
+      const settings = getSettings();
+
+      document.body.className = "theme-" + settings.theme;
+
+      document.getElementById("sideName").textContent = settings.storeName || "BurgerPro Dono";
+      document.getElementById("sideLogo").innerHTML = settings.logo ? `<img src="${settings.logo}">` : "🍔";
+
+      document.getElementById("storeName").value = settings.storeName || "";
+      document.getElementById("storeSlogan").value = settings.slogan || "";
+      document.getElementById("storeWhatsapp").value = settings.whatsapp || "";
+      document.getElementById("deliveryFee").value = settings.deliveryFee || 0;
+      document.getElementById("minOrder").value = settings.minOrder || 0;
+      document.getElementById("deliveryTime").value = settings.deliveryTime || "";
+
+      document.getElementById("storeStatusText").innerHTML = settings.isOpen
+        ? `<span class="badge green">Loja aberta</span>`
+        : `<span class="badge red">Loja fechada</span>`;
+
+      document.getElementById("logoPreview").innerHTML = settings.logo ? `<img src="${settings.logo}">` : "🍔";
+
+      const names = { yellow: "Amarelo", red: "Vermelho", green: "Verde", blue: "Azul", purple: "Roxo" };
+      document.getElementById("themeName").textContent = names[settings.theme] || "Amarelo";
+
+      document.querySelectorAll(".theme-btn").forEach(btn => btn.classList.remove("active"));
+      const active = document.querySelector(".t-" + settings.theme);
+      if (active) active.classList.add("active");
+    }
+
+
+    function getValidFinanceOrders() {
+      return getOrders().filter(o => !["Cancelado"].includes(o.status));
+    }
+
+    function dateOnly(value) {
+      if (!value) return "";
+      return new Date(value).toISOString().slice(0, 10);
+    }
+
+    function getMonday(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      d.setDate(diff);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }
+
+    function isBetweenDates(order, start, end) {
+      if (!order.createdAt) return false;
+      const d = dateOnly(order.createdAt);
+      if (start && d < start) return false;
+      if (end && d > end) return false;
+      return true;
+    }
+
+    function sumOrders(orders) {
+      return orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    }
+
+    function renderFinance() {
+      const orders = getValidFinanceOrders();
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0, 10);
+
+      const weekStart = getMonday(today).toISOString().slice(0, 10);
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0, 10);
+
+      const todayOrders = orders.filter(o => dateOnly(o.createdAt) === todayStr);
+      const weekOrders = orders.filter(o => isBetweenDates(o, weekStart, todayStr));
+      const monthOrders = orders.filter(o => isBetweenDates(o, monthStart, todayStr));
+
+      document.getElementById("financeToday").textContent = money(sumOrders(todayOrders));
+      document.getElementById("financeWeek").textContent = money(sumOrders(weekOrders));
+      document.getElementById("financeMonth").textContent = money(sumOrders(monthOrders));
+      document.getElementById("financeTotal").textContent = money(sumOrders(orders));
+
+      const payments = {};
+      orders.forEach(order => {
+        const key = order.payment || "Não informado";
+        payments[key] = (payments[key] || 0) + Number(order.total || 0);
+      });
+
+      const paymentEntries = Object.entries(payments);
+      document.getElementById("paymentSummary").innerHTML = paymentEntries.length
+        ? paymentEntries.map(([name, total]) => `
+          <div class="finance-line">
+            <span>${name}</span>
+            <strong>${money(total)}</strong>
+          </div>
+        `).join("")
+        : `<div class="empty">Nenhuma venda registrada.</div>`;
+
+      let start = document.getElementById("financeStart").value;
+      let end = document.getElementById("financeEnd").value;
+
+      if (!start && !end) {
+        start = todayStr;
+        end = todayStr;
+        document.getElementById("financeStart").value = start;
+        document.getElementById("financeEnd").value = end;
+      }
+
+      const periodOrders = orders.filter(o => isBetweenDates(o, start, end));
+      const periodTotal = sumOrders(periodOrders);
+      const periodTicket = periodOrders.length ? periodTotal / periodOrders.length : 0;
+
+      document.getElementById("financePeriodTotal").textContent = money(periodTotal);
+      document.getElementById("financePeriodOrders").textContent = periodOrders.length;
+      document.getElementById("financePeriodTicket").textContent = money(periodTicket);
+
+      document.getElementById("financeTable").innerHTML = periodOrders.length
+        ? `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Data</th>
+                  <th>Cliente</th>
+                  <th>Pagamento</th>
+                  <th>Status</th>
+                  <th>Itens</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${periodOrders.map(order => `
+                  <tr>
+                    <td>#${order.number || "-"}</td>
+                    <td>${order.createdAt ? new Date(order.createdAt).toLocaleString("pt-BR") : "-"}</td>
+                    <td>${order.customerName || "Cliente"}</td>
+                    <td>${order.payment || "-"}</td>
+                    <td>${order.status || "Novo"}</td>
+                    <td>${(order.items || []).map(i => `${i.qty}x ${i.name}`).join("<br>")}</td>
+                    <td><strong>${money(order.total)}</strong></td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `
+        : `<div class="empty">Nenhum pedido encontrado nesse período.</div>`;
+    }
+
+    function exportFinanceCSV() {
+      const start = document.getElementById("financeStart").value;
+      const end = document.getElementById("financeEnd").value;
+      const orders = getValidFinanceOrders().filter(o => isBetweenDates(o, start, end));
+
+      if (!orders.length) {
+        alert("Não há pedidos para exportar nesse período.");
+        return;
+      }
+
+      const rows = [
+        ["Pedido", "Data", "Cliente", "Telefone", "Pagamento", "Status", "Itens", "Total"]
+      ];
+
+      orders.forEach(order => {
+        rows.push([
+          order.number || "",
+          order.createdAt ? new Date(order.createdAt).toLocaleString("pt-BR") : "",
+          order.customerName || "",
+          order.phone || "",
+          order.payment || "",
+          order.status || "",
+          (order.items || []).map(i => `${i.qty}x ${i.name}`).join(" | "),
+          Number(order.total || 0).toFixed(2).replace(".", ",")
+        ]);
+      });
+
+      const csv = rows.map(row => row.map(cell => `"${String(cell).replaceAll('"', '""')}"`).join(";")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `faturamento_${start || "inicio"}_${end || "fim"}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+
+    function renderAll() {
+      renderClock();
+      renderStats();
+      renderDashboard();
+      renderFinance();
+      renderFilters();
+      renderOrders();
+      renderProducts();
+      renderCombos();
+      renderExtras();
+      renderStock();
+      applySettings();
+    }
+
+    setInterval(renderClock, 1000);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!localStorage.getItem(PRODUCTS_KEY)) saveProducts(defaultProducts);
+      if (!localStorage.getItem(SETTINGS_KEY)) saveSettings(defaultSettings);
+
+      if (localStorage.getItem(AUTH_KEY) === "true") {
+        openApp();
+      } else {
+        applySettings();
+      }
+    });
+  </script>
+</body>
+</html>
