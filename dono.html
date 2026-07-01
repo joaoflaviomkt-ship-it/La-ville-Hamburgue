@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Área do Dono 2.1 - Hamburgueria</title>
+  <title>Área do Dono 2.2 - Hamburgueria</title>
 
   <style>
     :root {
@@ -630,7 +630,7 @@
 <body class="theme-yellow">
   <section id="login" class="login">
     <div class="login-card">
-      <h1>Área do Dono 2.1</h1>
+      <h1>Área do Dono 2.2</h1>
       <p>Agora com visual personalizável, logo, estoque, taxa de entrega, loja aberta/fechada, edição de produtos, combos e adicionais.</p>
 
       <label>Senha do dono</label>
@@ -651,7 +651,7 @@
         </div>
       </div>
 
-      <div class="version">PAINEL DO DONO 2.1</div>
+      <div class="version">PAINEL DO DONO 2.2</div>
 
       <nav class="nav">
         <button id="nav-dashboard" class="active" onclick="showPage('dashboard')">📊 Dashboard</button>
@@ -853,6 +853,16 @@
             <div class="full">
               <label>Descrição</label>
               <textarea name="description" rows="3" required placeholder="Ex: 2 burgers + batata + 2 refrigerantes"></textarea>
+            </div>
+
+            <div>
+              <label>Imagem do combo</label>
+              <input type="file" accept="image/*" onchange="previewComboImage(event)">
+            </div>
+
+            <div>
+              <label>Prévia do combo</label>
+              <div id="comboPreview" class="preview">Sem imagem</div>
             </div>
 
             <div class="full">
@@ -1098,6 +1108,7 @@
 
     let currentFilter = "Todos";
     let selectedProductImage = "";
+    let selectedComboImage = "";
     let selectedLogoImage = "";
     let selectedEditImage = "";
 
@@ -1458,6 +1469,18 @@
       alert("Produto editado.");
     }
 
+    function previewComboImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        selectedComboImage = e.target.result;
+        document.getElementById("comboPreview").innerHTML = `<img src="${selectedComboImage}">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function addCombo(event) {
       event.preventDefault();
 
@@ -1471,13 +1494,15 @@
         description: data.get("description"),
         price: Number(data.get("price")),
         emoji: "🎁",
-        image: "",
+        image: selectedComboImage,
         available: true,
         type: "combo"
       });
 
       saveProducts(products);
+      selectedComboImage = "";
       event.target.reset();
+      document.getElementById("comboPreview").innerHTML = "Sem imagem";
       renderCombos();
       renderProducts();
       alert("Combo cadastrado.");
@@ -1487,9 +1512,10 @@
       const combos = getProducts().filter(p => p.type === "combo" || String(p.category || "").toLowerCase().includes("combo"));
 
       document.getElementById("comboList").innerHTML = combos.length ? combos.map(c => `
-        <article class="row-item">
+        <article class="product">
+          <div class="photo">${productPhoto(c)}</div>
           <div>
-            <h3>${c.emoji || "🎁"} ${c.name}</h3>
+            <h3>${c.name}</h3>
             <p>${c.description}</p>
             <p><strong>${money(c.price)}</strong> • ${c.available ? "Disponível" : "Indisponível"}</p>
           </div>
