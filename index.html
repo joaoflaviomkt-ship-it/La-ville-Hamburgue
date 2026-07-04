@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Ville Burgue - Links</title>
+  <style>
+    :root{--bg:#fff1df;--card:#fffaf3;--red:#df1f2d;--red2:#9e101b;--yellow:#ffbf2f;--brown:#4a1f14;--muted:#8a4b35;--shadow:0 26px 70px rgba(111,35,15,.22)}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent} body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 10%,rgba(255,255,255,.65),transparent 25%),radial-gradient(circle at 92% 82%,rgba(223,31,45,.16),transparent 28%),linear-gradient(135deg,#fff7e9,#ffd4bd);font-family:Arial,Helvetica,sans-serif;display:grid;place-items:center;padding:18px;color:var(--red)}
+    .page{width:min(430px,100%);min-height:690px;background:rgba(255,250,243,.90);border:2px solid var(--red);border-radius:36px;box-shadow:var(--shadow);padding:30px 24px 22px;text-align:center;position:relative;overflow:hidden}.page:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:rgba(255,191,47,.18);top:-130px;right:-110px}.page:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(223,31,45,.08);bottom:-110px;left:-88px}.content{position:relative;z-index:2}.logo{width:138px;height:138px;border-radius:38px;margin:18px auto 26px;background:linear-gradient(135deg,var(--yellow),var(--red));display:grid;place-items:center;color:#fff;font-size:58px;box-shadow:0 20px 42px rgba(223,31,45,.23);overflow:hidden}.logo img{width:100%;height:100%;object-fit:cover}.tag{display:inline-flex;gap:8px;align-items:center;padding:9px 13px;border:1px solid rgba(223,31,45,.22);border-radius:999px;background:#fff;margin-bottom:18px;color:var(--brown);font-weight:900;font-size:12px}.dot{width:9px;height:9px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 5px rgba(22,163,74,.13)}.dot.closed{background:#ef4444;box-shadow:0 0 0 5px rgba(239,68,68,.13)}h1{margin:0;font-size:34px;letter-spacing:-.8px;color:var(--red);font-weight:950}.subtitle{margin:12px 0 26px;color:var(--muted);line-height:1.5;font-weight:700}.buttons{display:grid;gap:12px}.btn{min-height:59px;border:2px solid var(--red);border-radius:999px;background:#fff;color:var(--red);font-weight:950;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:.18s;padding:0 18px}.btn:hover{transform:translateY(-2px);background:var(--red);color:#fff;box-shadow:0 14px 32px rgba(223,31,45,.22)}.btn.primary{background:var(--red);color:#fff}.btn.admin{background:#21130f;color:#fff;border-color:#21130f}.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.mini .btn{font-size:13px;min-height:48px}.info{margin:22px 0 0;color:var(--muted);font-size:13px;font-weight:800;display:grid;gap:6px}.footer{margin-top:20px;color:#a66b55;font-size:12px;font-weight:800}@media(max-width:470px){body{padding:10px}.page{min-height:calc(100vh - 20px);padding:28px 20px 18px}.logo{width:124px;height:124px;font-size:50px}h1{font-size:30px}.btn{font-size:15px}.mini{grid-template-columns:1fr}}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main class="page">
+    <div class="content">
+      <div id="statusTag" class="tag"><span id="statusDot" class="dot"></span><span id="statusText">Aberto para pedidos</span></div>
+      <div id="logo" class="logo">🍔</div>
+      <h1 id="storeName">La Ville Burgue</h1>
+      <p id="slogan" class="subtitle">Hambúrguer artesanal feito com amor!</p>
+      <section class="buttons">
+        <a class="btn primary" href="cardapio.html">🍔 Ver cardápio digital</a>
+        <a id="whatsappLink" class="btn" href="#" target="_blank">💬 WhatsApp para pedidos</a>
+        <a id="locationLink" class="btn" href="#" target="_blank">📍 Localização</a>
+        <a id="ifoodLink" class="btn" href="#" target="_blank">🛵 iFood</a>
+      </section>
+      <div class="mini">
+        <a class="btn admin" href="funcionarios.html">👨‍🍳 Funcionários</a>
+        <a class="btn admin" href="dono.html">🔐 Dono</a>
+      </div>
+      <div class="info">
+        <span id="deliveryInfo">Entrega 35–50 min</span>
+        <span id="minOrderInfo">Pedido mínimo R$ 20,00</span>
+        <span id="addressInfo">📍 Av. Visconde da Parnaíba, 2780 - Horto Florestal</span>
+        <span>Entrega • Retirada • Pix • Cartão • Dinheiro</span>
+      </div>
+      <div class="footer">BurgerPro v5 • Cardápio + pedidos + gestão</div>
+    </div>
+  </main>
+  <script>
+    /*
+      CONFIGURAÇÃO DO SUPABASE
+      Use a URL base do projeto, sem /rest/v1 no final.
+      A chave abaixo é a publishable/anon key, própria para frontend.
+    */
+    const SUPABASE_URL = 'https://ekydstwrxiezmawkodsm.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hkOJW2Msy3guNTCfMI1Atg_2MrocwpB';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    const SETTINGS_KEY='burgerpro_v5_settings';
+    const defaultSettings={name:'La Ville Burgue',slogan:'Hambúrguer artesanal feito com amor!',whatsapp:'5586995120634',address:'Av. Visconde da Parnaíba, 2780 - Horto Florestal',locationUrl:'https://maps.app.goo.gl/Ls5xL49bYY7Xck7V7',ifoodUrl:'https://www.ifood.com.br/',pixKey:'pix@lavilleburgue.com',isOpen:true,deliveryTime:'35–50 min',minOrder:20,defaultDeliveryFee:5,logo:'',_laVillePresetApplied:true};
+
+    function money(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+
+    function migrateSettings(){
+      try{
+        const saved=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}')||{};
+        if(!saved._laVillePresetApplied&&(!saved.name||saved.name==='Burger House'||saved.whatsapp==='5531999999999')){
+          localStorage.setItem(SETTINGS_KEY,JSON.stringify({...saved,...defaultSettings,logo:saved.logo||'',theme:saved.theme||defaultSettings.theme}))
+        }
+      }catch(e){}
+    }
+
+    function getLocalSettings(){
+      migrateSettings();
+      try{return {...defaultSettings,...JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}')}}
+      catch(e){return defaultSettings}
+    }
+
+    async function getSupabaseSettings(){
+      const { data, error } = await supabaseClient
+        .from('store_settings')
+        .select('*')
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) return {};
+
+      return {
+        name: data.name,
+        slogan: data.slogan,
+        whatsapp: data.whatsapp,
+        address: data.address,
+        locationUrl: data.location_url,
+        ifoodUrl: data.ifood_url,
+        pixKey: data.pix_key,
+        isOpen: data.is_open,
+        deliveryTime: data.delivery_time,
+        minOrder: data.min_order,
+        defaultDeliveryFee: data.default_delivery_fee,
+        logo: data.logo_url || ''
+      };
+    }
+
+    async function getSettings(){
+      const local = getLocalSettings();
+
+      try {
+        const remote = await getSupabaseSettings();
+        return {...local, ...Object.fromEntries(Object.entries(remote).filter(([_,v]) => v !== null && v !== undefined))};
+      } catch (error) {
+        console.warn('Não foi possível carregar dados do Supabase. Usando dados locais.', error);
+        return local;
+      }
+    }
+
+    async function render(){
+      const s = await getSettings();
+
+      document.title=s.name+' - Links';
+      storeName.textContent=s.name;
+      slogan.textContent=s.slogan||defaultSettings.slogan;
+      deliveryInfo.textContent='Entrega '+(s.deliveryTime||'35–50 min');
+      minOrderInfo.textContent='Pedido mínimo '+money(s.minOrder);
+      statusText.textContent=s.isOpen?'Aberto para pedidos':'Fechado no momento';
+      statusDot.className=s.isOpen?'dot':'dot closed';
+      logo.innerHTML=s.logo?`<img src="${s.logo}" alt="Logo">`:'🍔';
+
+      const msg=encodeURIComponent('Olá! Vim pela página da hamburgueria e gostaria de fazer um pedido.');
+      whatsappLink.href=`https://wa.me/${s.whatsapp}?text=${msg}`;
+      addressInfo.textContent='📍 '+(s.address||'Av. Visconde da Parnaíba, 2780 - Horto Florestal');
+      locationLink.href=s.locationUrl||'#';
+      ifoodLink.href=s.ifoodUrl||'#';
+    }
+
+    render();
+    window.addEventListener('storage',render);
+  </script>
+</body>
+</html>
