@@ -294,9 +294,5 @@ setInterval(renderClock,1000);
 setInterval(()=>{ if(localStorage.getItem(AUTH_KEY)==='true') refresh(); },30000);
 if(localStorage.getItem(AUTH_KEY)==='true') openApp();
 </script>
-
-</head><body><h1>${esc(s.name)}</h1><div class="big">Pedido #${o.number}</div><p>${new Date(o.createdAt).toLocaleString('pt-BR')}</p><hr><ul>${itemList(o)}</ul><hr><p><strong>Subtotal:</strong> ${money(o.subtotal)}<br><strong>Entrega:</strong> ${money(o.deliveryFee)}<br><strong>Desconto:</strong> ${money(o.discount)}<br><strong>Total:</strong> ${money(o.total)}</p><p><strong>Cliente:</strong> ${esc(o.customerName)}<br><strong>Tipo:</strong> ${esc(o.deliveryType)}<br><strong>Endereço:</strong> ${esc(o.address||'Retirada')}<br><strong>Pagamento:</strong> ${esc(o.payment)}</p>${o.notes?`<p><strong>Obs:</strong> ${esc(o.notes)}</p>`:''}</body></html>`;const w=open('','_blank','width=420,height=700');w.document.write(html);w.document.close();w.print()}
-function renderAll(){renderClock();renderStats();renderDashboard();renderFilters();renderOrders();renderFinance();renderProducts();renderExtras();renderCoupons();renderZones();renderStock();applySettings()}setInterval(renderClock,1000);seed();if(localStorage.getItem(K.auth)==='true')openApp();window.addEventListener('storage',renderAll);
-</script>
 </body>
 </html>
