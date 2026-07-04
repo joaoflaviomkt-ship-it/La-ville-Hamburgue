@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BurgerPro - Painel do Dono</title>
+  <style>
+    :root{--bg:#0b0f19;--card:#121826;--card2:#182033;--text:#f8fafc;--muted:#94a3b8;--line:rgba(255,255,255,.10);--brand:#ffb703;--brand2:#ef4444;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--orange:#f97316;--radius:22px}body.theme-red{--brand:#ef4444;--brand2:#7f1d1d}body.theme-yellow{--brand:#ffb703;--brand2:#ef4444}body.theme-green{--brand:#22c55e;--brand2:#064e3b}body.theme-blue{--brand:#38bdf8;--brand2:#1d4ed8}body.theme-purple{--brand:#a855f7;--brand2:#581c87}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:radial-gradient(circle at top left,color-mix(in srgb,var(--brand) 22%,transparent),transparent 28%),radial-gradient(circle at top right,color-mix(in srgb,var(--brand2) 18%,transparent),transparent 25%),var(--bg);min-height:100vh}button,input,textarea,select{font-family:inherit}.login{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{width:min(460px,100%);background:rgba(18,24,38,.92);border:1px solid var(--line);border-radius:28px;padding:28px;box-shadow:0 28px 80px rgba(0,0,0,.35)}h1,h2,h3{margin-top:0}h1{font-size:clamp(30px,5vw,46px);letter-spacing:-1px;margin-bottom:8px}p,.muted{color:var(--muted);line-height:1.45}label{display:block;margin-bottom:7px;color:var(--muted);font-size:13px;font-weight:900}input,textarea,select{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.055);color:var(--text);border-radius:14px;padding:12px;outline:none}option{background:#111827;color:white}.btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);padding:12px 14px;border-radius:14px;font-weight:900;cursor:pointer;transition:.18s}.btn:hover{transform:translateY(-1px)}.btn.primary{background:var(--brand);color:#111827;border-color:transparent}.btn.red{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.35);color:#fecaca}.btn.green{background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.35);color:#bbf7d0}.btn.blue{background:rgba(59,130,246,.16);border-color:rgba(59,130,246,.35);color:#bfdbfe}.app{display:none;grid-template-columns:290px 1fr;min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px;background:rgba(11,15,25,.84);border-right:1px solid var(--line);backdrop-filter:blur(18px)}.brand-box{display:flex;align-items:center;gap:12px;margin-bottom:18px}.logo{width:58px;height:58px;border-radius:20px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;font-size:30px;overflow:hidden;flex:none}.logo img{width:100%;height:100%;object-fit:cover}.brand-box strong{display:block;font-size:17px}.brand-box small{color:var(--muted)}.version{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#111827;padding:13px;border-radius:18px;font-weight:950;margin-bottom:16px;text-align:center}.nav{display:grid;gap:9px}.nav button{text-align:left;display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.045);color:var(--text);padding:12px;border-radius:14px;font-weight:900;cursor:pointer}.nav button.active{background:var(--brand);color:#111827;border-color:transparent}.logout{width:100%;margin-top:16px}main{padding:26px;overflow:hidden}.mobile-nav{display:none;position:sticky;top:0;z-index:10;background:rgba(11,15,25,.92);border-bottom:1px solid var(--line);padding:12px;backdrop-filter:blur(18px)}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}.clock{border:1px solid var(--line);background:rgba(255,255,255,.055);border-radius:999px;padding:11px 14px;font-weight:900;white-space:nowrap}.page{display:none}.page.active{display:block}.notice{background:rgba(255,183,3,.14);border:1px solid rgba(255,183,3,.35);color:#fde68a;padding:14px;border-radius:18px;font-weight:800;margin-bottom:16px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}.card{background:rgba(18,24,38,.86);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 18px 45px rgba(0,0,0,.18)}.stat span{color:var(--muted);font-size:13px;font-weight:900}.stat strong{display:block;font-size:27px;margin-top:8px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.full{grid-column:1/-1}.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.filter.active{background:var(--brand);color:#111827;border-color:transparent}.orders,.products,.list{display:grid;gap:12px}.order,.product,.row-item{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:20px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start}.product{grid-template-columns:80px 1fr auto;align-items:center}.photo,.preview,.logo-preview{width:80px;height:80px;border-radius:20px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;overflow:hidden;font-size:34px;border:1px solid var(--line)}.preview{width:130px;height:100px;color:var(--muted);font-size:13px;background:rgba(255,255,255,.04);border-style:dashed}.logo-preview{background:rgba(255,255,255,.04);border-style:dashed;font-size:32px}.photo img,.preview img,.logo-preview img{width:100%;height:100%;object-fit:cover}.actions{display:grid;gap:8px;min-width:180px}.status{display:inline-block;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:950;color:#fff;margin-left:6px}.Novo{background:var(--blue)}.Preparando{background:var(--purple)}.Pronto{background:var(--orange);color:#111827}.Saiu{background:#06b6d4;color:#111827}.Entregue{background:var(--green)}.Cancelado{background:var(--red)}.badge{display:inline-flex;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid var(--line)}.badge.green{color:#bbf7d0;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.12)}.badge.red{color:#fecaca;border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.12)}.theme-options{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.theme-btn{height:64px;border-radius:18px;border:2px solid var(--line);cursor:pointer}.t-yellow{background:linear-gradient(135deg,#ffb703,#ef4444)}.t-red{background:linear-gradient(135deg,#ef4444,#7f1d1d)}.t-green{background:linear-gradient(135deg,#22c55e,#064e3b)}.t-blue{background:linear-gradient(135deg,#38bdf8,#1d4ed8)}.t-purple{background:linear-gradient(135deg,#a855f7,#581c87)}.table-wrap{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--brand);font-size:13px;text-transform:uppercase;letter-spacing:.4px}.finance-box{display:grid;gap:12px}.finance-line{display:flex;justify-content:space-between;gap:14px;padding:13px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.035);font-weight:900}.finance-line span:first-child{color:var(--muted)}.empty{color:var(--muted);text-align:center;padding:30px 10px}.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:30;display:none;place-items:center;padding:18px}.modal-bg.open{display:grid}.modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#121826;border:1px solid var(--line);border-radius:26px;box-shadow:0 35px 90px rgba(0,0,0,.40)}.modal-head{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:14px}.modal-body{padding:18px}.close{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-size:22px;cursor:pointer}@media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:block}main{padding:18px}.stats,.grid-3{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}}@media(max-width:720px){.top,.order,.row-item{grid-template-columns:1fr;flex-direction:column}.stats,.grid-3,.form-grid{grid-template-columns:1fr}.product{grid-template-columns:74px 1fr}.photo{width:74px;height:74px;font-size:32px}.product .actions{grid-column:1/-1}.actions{min-width:0}.theme-options{grid-template-columns:repeat(3,1fr)}}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="theme-yellow">
+<section id="login" class="login"><div class="login-card"><h1>Área do Dono 3.0</h1><p>Painel completo com pedidos, faturamento, produtos, adicionais, cupons, entregas, estoque, visual e configurações conectadas ao cardápio.</p><label>Senha do dono</label><input id="password" type="password" placeholder="Digite a senha" style="margin-bottom:14px"><button class="btn primary" style="width:100%" onclick="login()">Entrar</button><p style="font-size:13px">Senha demo: <strong>dono123</strong></p></div></section>
+<section id="app" class="app"><aside class="sidebar"><div class="brand-box"><div id="sideLogo" class="logo">🍔</div><div><strong id="sideName">La Ville Burgue Dono</strong><small>Painel completo</small></div></div><div class="version">PAINEL DO DONO 3.0</div><nav class="nav"><button id="nav-dashboard" class="active" onclick="showPage('dashboard')">📊 Dashboard</button><button id="nav-pedidos" onclick="showPage('pedidos')">🧾 Pedidos</button><button id="nav-faturamento" onclick="showPage('faturamento')">💰 Faturamento</button><button id="nav-produtos" onclick="showPage('produtos')">🍔 Produtos</button><button id="nav-adicionais" onclick="showPage('adicionais')">➕ Adicionais</button><button id="nav-cupons" onclick="showPage('cupons')">🏷️ Cupons</button><button id="nav-entregas" onclick="showPage('entregas')">🛵 Entregas</button><button id="nav-estoque" onclick="showPage('estoque')">📦 Estoque</button><button id="nav-config" onclick="showPage('config')">⚙️ Configurações</button><button id="nav-visual" onclick="showPage('visual')">🎨 Visual</button></nav><button class="btn red logout" onclick="logout()">Sair do painel</button></aside><div class="mobile-nav"><select onchange="showPage(this.value)"><option value="dashboard">📊 Dashboard</option><option value="pedidos">🧾 Pedidos</option><option value="faturamento">💰 Faturamento</option><option value="produtos">🍔 Produtos</option><option value="adicionais">➕ Adicionais</option><option value="cupons">🏷️ Cupons</option><option value="entregas">🛵 Entregas</option><option value="estoque">📦 Estoque</option><option value="config">⚙️ Configurações</option><option value="visual">🎨 Visual</option></select></div><main><section class="top"><div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Resumo geral da hamburgueria.</p></div><div class="clock" id="clock">--:--</div></section>
+<section id="page-dashboard" class="page active"><div id="statusNotice" class="notice"></div><div class="stats"><div class="card stat"><span>Faturamento hoje</span><strong id="statRevenue">R$ 0,00</strong></div><div class="card stat"><span>Pedidos hoje</span><strong id="statOrders">0</strong></div><div class="card stat"><span>Ticket médio</span><strong id="statTicket">R$ 0,00</strong></div><div class="card stat"><span>Pedidos abertos</span><strong id="statOpen">0</strong></div></div><div class="grid-2"><div class="card"><h2>Últimos pedidos</h2><div id="latestOrders" class="orders"></div></div><div class="card"><h2>Ações rápidas</h2><div class="grid-2"><button class="btn primary" onclick="showPage('produtos')">Cadastrar produto</button><button class="btn blue" onclick="showPage('cupons')">Criar cupom</button><button class="btn green" onclick="toggleStoreStatus()">Abrir/fechar loja</button><button class="btn red" onclick="clearFinishedOrders()">Limpar finalizados</button></div></div></div></section>
+<section id="page-pedidos" class="page"><div class="notice">Aqui o dono vê valores e pode cancelar com motivo. Funcionários não acessam faturamento.</div><div id="filters" class="filters"></div><button class="btn red" onclick="clearFinishedOrders()" style="margin-bottom:14px">Limpar pedidos finalizados</button><div id="ordersList" class="orders"></div></section>
+<section id="page-faturamento" class="page"><div class="stats"><div class="card stat"><span>Hoje</span><strong id="financeToday">R$ 0,00</strong></div><div class="card stat"><span>Semana</span><strong id="financeWeek">R$ 0,00</strong></div><div class="card stat"><span>Mês</span><strong id="financeMonth">R$ 0,00</strong></div><div class="card stat"><span>Total geral</span><strong id="financeTotal">R$ 0,00</strong></div></div><div class="grid-3" style="margin-bottom:16px"><div class="card"><h2>Mais vendido</h2><div id="bestSeller" class="finance-box"></div></div><div class="card"><h2>Horário de pico</h2><div id="peakHour" class="finance-box"></div></div><div class="card"><h2>Cancelamentos</h2><div id="cancelSummary" class="finance-box"></div></div></div><div class="grid-2" style="margin-bottom:16px"><div class="card"><h2>Vendas por pagamento</h2><div id="paymentSummary" class="finance-box"></div></div><div class="card"><h2>Filtrar faturamento</h2><div class="form-grid"><div><label>Data inicial</label><input id="financeStart" type="date"></div><div><label>Data final</label><input id="financeEnd" type="date"></div><div class="full"><button class="btn primary" onclick="renderFinance()">Filtrar</button><button class="btn blue" onclick="exportFinanceCSV()" type="button">Exportar CSV</button></div></div><div style="margin-top:16px" class="finance-box"><div class="finance-line"><span>Total no período</span><strong id="financePeriodTotal">R$ 0,00</strong></div><div class="finance-line"><span>Pedidos no período</span><strong id="financePeriodOrders">0</strong></div><div class="finance-line"><span>Ticket médio</span><strong id="financePeriodTicket">R$ 0,00</strong></div></div></div></div><div class="card"><h2>Detalhamento de pedidos pagos</h2><div id="financeTable"></div></div></section>
+<section id="page-produtos" class="page"><div class="card" style="margin-bottom:16px"><h2>Cadastrar produto</h2><form class="form-grid" onsubmit="addProduct(event)"><div><label>Nome</label><input name="name" required placeholder="Ex: Smash Bacon"></div><div><label>Preço</label><input name="price" required type="number" step="0.01"></div><div><label>Categoria</label><input name="category" required placeholder="Mais pedidos, Bebidas..."></div><div><label>Emoji reserva</label><input name="emoji" placeholder="🍔"></div><div class="full"><label>Descrição</label><textarea name="description" rows="3" required></textarea></div><div class="full"><label>Receita para baixa automática de estoque</label><textarea name="recipeText" rows="4" placeholder="Pão brioche:1&#10;Carne smash:2&#10;Cheddar:2"></textarea></div><div><label>Imagem</label><input type="file" accept="image/*" onchange="previewProductImage(event)"></div><div><label>Prévia</label><div id="productPreview" class="preview">Sem imagem</div></div><div class="full"><button class="btn primary" type="submit">Adicionar produto</button></div></form></div><div id="productsList" class="products"></div></section>
+<section id="page-adicionais" class="page"><div class="grid-2"><div class="card"><h2>Cadastrar adicional</h2><form class="form-grid" onsubmit="addExtra(event)"><div><label>Nome</label><input name="name" required placeholder="Bacon extra"></div><div><label>Preço</label><input name="price" required type="number" step="0.01"></div><div><label>Ingrediente do estoque</label><select name="stockId" id="extraStock"></select></div><div><label>Quantidade baixa</label><input name="stockQty" type="number" step="1" value="1"></div><div class="full"><button class="btn primary" type="submit">Adicionar</button></div></form></div><div class="card"><h2>Adicionais cadastrados</h2><div id="extrasList" class="list"></div></div></div></section>
+<section id="page-cupons" class="page"><div class="grid-2"><div class="card"><h2>Criar cupom</h2><form class="form-grid" onsubmit="addCoupon(event)"><div><label>Código</label><input name="code" required placeholder="BURGER10"></div><div><label>Tipo</label><select name="type"><option value="percent">Porcentagem</option><option value="fixed">Valor fixo</option><option value="freeDelivery">Frete grátis</option></select></div><div><label>Valor</label><input name="value" type="number" step="0.01" value="10"></div><div><label>Pedido mínimo</label><input name="min" type="number" step="0.01" value="0"></div><div class="full"><button class="btn primary" type="submit">Criar cupom</button></div></form></div><div class="card"><h2>Cupons ativos</h2><div id="couponsList" class="list"></div></div></div></section>
+<section id="page-entregas" class="page"><div class="grid-2"><div class="card"><h2>Taxas por bairro</h2><form class="form-grid" onsubmit="addZone(event)"><div><label>Bairro/região</label><input name="name" required placeholder="Centro"></div><div><label>Taxa</label><input name="fee" required type="number" step="0.01"></div><div class="full"><button class="btn primary" type="submit">Adicionar taxa</button></div></form><div id="zonesList" class="list" style="margin-top:16px"></div></div><div class="card"><h2>Pedidos para entrega</h2><div id="deliveryOrders" class="orders"></div></div></div></section>
+<section id="page-estoque" class="page"><div class="grid-2"><div class="card"><h2>Cadastrar item no estoque</h2><form class="form-grid" onsubmit="addStock(event)"><div><label>Item</label><input name="name" required placeholder="Pão brioche"></div><div><label>Quantidade</label><input name="qty" required type="number" step="1"></div><div><label>Quantidade mínima</label><input name="min" required type="number" step="1"></div><div><label>Unidade</label><input name="unit" placeholder="un, kg, pct"></div><div class="full"><button class="btn primary" type="submit">Adicionar no estoque</button></div></form></div><div class="card"><h2>Estoque atual</h2><div id="stockList" class="list"></div></div></div></section>
+<section id="page-config" class="page"><div class="card"><h2>Configurações da hamburgueria</h2><form class="form-grid" onsubmit="saveStoreSettings(event)"><div><label>Nome</label><input id="storeName" required></div><div><label>Slogan</label><input id="storeSlogan"></div><div><label>WhatsApp</label><input id="storeWhatsapp" placeholder="5531999999999"></div><div><label>Chave Pix</label><input id="storePix" placeholder="pix@exemplo.com"></div><div><label>Pedido mínimo</label><input id="minOrder" type="number" step="0.01"></div><div><label>Tempo de entrega</label><input id="deliveryTime"></div><div><label>Endereço</label><input id="storeAddress" placeholder="Av. Visconde da Parnaíba, 2780 - Horto Florestal"></div><div><label>Google Maps</label><input id="locationUrl"></div><div><label>Link iFood</label><input id="ifoodUrl"></div><div class="full"><button class="btn green" type="button" onclick="toggleStoreStatus()">Alterar status aberto/fechado</button><p id="storeStatusText"></p></div><div><label>Logo</label><input type="file" accept="image/*" onchange="previewLogo(event)"></div><div><label>Prévia</label><div id="logoPreview" class="logo-preview">🍔</div></div><div class="full"><button class="btn primary" type="submit">Salvar configurações</button></div></form></div></section>
+<section id="page-visual" class="page"><div class="grid-2"><div class="card"><h2>Alterar visual</h2><p>Escolha a cor principal do painel do dono.</p><div class="theme-options"><button class="theme-btn t-yellow" onclick="setTheme('yellow')"></button><button class="theme-btn t-red" onclick="setTheme('red')"></button><button class="theme-btn t-green" onclick="setTheme('green')"></button><button class="theme-btn t-blue" onclick="setTheme('blue')"></button><button class="theme-btn t-purple" onclick="setTheme('purple')"></button></div></div><div class="card"><h2>Arquivos do sistema</h2><p>Abra o cardápio em outro arquivo na mesma pasta para testar as configurações sincronizadas pelo navegador.</p><div class="grid-2"><a class="btn primary" href="cardapio.html">Abrir cardápio</a><a class="btn blue" href="funcionarios.html">Abrir funcionários</a></div></div></div></section>
+</main></section>
+<div id="modalBg" class="modal-bg"><div class="modal"><div class="modal-head"><h2 id="modalTitle">Editar</h2><button class="close" onclick="closeModal()">×</button></div><div id="modalBody" class="modal-body"></div></div></div>
+
+<script>
+/*
+  PAINEL DO DONO + SUPABASE
+  Etapa 2 concluída:
+  - Lê e altera: store_settings, products, extras, coupons, delivery_zones, stock e orders
+  - Mantém a senha demo local para abrir o painel
+  - Para produção real, use Supabase Auth + RLS por usuário
+*/
+const SUPABASE_URL = "https://ekydstwrxiezmawkodsm.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_hkOJW2Msy3guNTCfMI1Atg_2MrocwpB";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+const AUTH_KEY = 'burgerpro_owner_auth_v5';
+const THEME_KEY = 'burgerpro_owner_theme_v5';
+
+let currentFilter = 'Todos';
+let selectedProductImage = '';
+let selectedLogo = '';
+let settingsId = null;
+let appData = {
+  settings: null,
+  products: [],
+  orders: [],
+  extras: [],
+  stock: [],
+  coupons: [],
+  zones: []
+};
+
+const defaults = {
+  settings: {
+    name: 'La Ville Burgue',
+    slogan: 'Hambúrguer artesanal feito com amor!',
+    whatsapp: '5586995120634',
+    pixKey: 'pix@lavilleburgue.com',
+    address: 'Av. Visconde da Parnaíba, 2780 - Horto Florestal',
+    isOpen: true,
+    deliveryTime: '35–50 min',
+    minOrder: 20,
+    defaultDeliveryFee: 5,
+    theme: 'yellow',
+    logo: '',
+    locationUrl: 'https://maps.app.goo.gl/Ls5xL49bYY7Xck7V7',
+    ifoodUrl: 'https://www.ifood.com.br/',
+    deliveryZones: [
+      { id: 'z1', name: 'Horto Florestal', fee: 5, active: true },
+      { id: 'z2', name: 'Centro', fee: 7, active: true },
+      { id: 'z3', name: 'Demais bairros', fee: 10, active: true }
+    ]
+  },
+  products: [
+    { id:'p1', name:'Jacquim', category:'Hambúrgueres', description:'Pão, blend 120g, queijo, alface, tomate, cebola caramelizada e molho especial.', price:15.99, emoji:'🍔', image:'', available:true, recipe:[] },
+    { id:'p2', name:'Carosella', category:'Hambúrgueres', description:'Pão, blend 120g, cheddar, alface, tomate, cebola caramelizada e molho especial.', price:17.99, emoji:'🍔', image:'', available:true, recipe:[] },
+    { id:'p3', name:'Perrone', category:'Hambúrgueres', description:'Pão, blend 120g, cheddar, bacon, cebola caramelizada e molho especial.', price:20.99, emoji:'🍔', image:'', available:true, recipe:[] },
+    { id:'p4', name:'Fogaça', category:'Hambúrgueres', description:'Pão, blend 120g, queijo, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.', price:24.99, emoji:'🍔', image:'', available:true, recipe:[] },
+    { id:'p5', name:'Laville', category:'Hambúrgueres', description:'Pão, duplo blend 120g, duplo cheddar, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.', price:28.99, emoji:'🍔', image:'', available:true, recipe:[] },
+    { id:'p6', name:'Batata Simples', category:'Porções', description:'Porção de batata frita simples.', price:19.99, emoji:'🍟', image:'', available:true, recipe:[] }
+  ],
+  extras: [
+    { id:'e1', name:'Queijo', price:2, available:true, stockId:'', stockQty:1 },
+    { id:'e2', name:'Cheddar', price:3, available:true, stockId:'', stockQty:1 },
+    { id:'e3', name:'Ovo', price:2, available:true, stockId:'', stockQty:1 },
+    { id:'e4', name:'Bacon', price:3, available:true, stockId:'', stockQty:1 },
+    { id:'e5', name:'Blend 120g', price:5, available:true, stockId:'', stockQty:1 }
+  ],
+  stock: [
+    { id:'s_pao', name:'Pão', qty:120, min:20, unit:'un' },
+    { id:'s_blend', name:'Blend 120g', qty:120, min:20, unit:'un' },
+    { id:'s_queijo', name:'Queijo', qty:120, min:20, unit:'fatias' },
+    { id:'s_cheddar', name:'Cheddar', qty:120, min:20, unit:'fatias' },
+    { id:'s_bacon', name:'Bacon', qty:80, min:15, unit:'porções' },
+    { id:'s_ovo', name:'Ovo', qty:60, min:10, unit:'un' },
+    { id:'s_batata', name:'Batata', qty:60, min:10, unit:'porções' }
+  ],
+  coupons: [
+    { id:'c1', code:'LAVILLE10', type:'percent', value:10, min:30, active:true },
+    { id:'c2', code:'FRETEGRATIS', type:'freeDelivery', value:0, min:50, active:true }
+  ]
+};
+
+function money(v){ return Number(v || 0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' }); }
+function esc(s){ return String(s ?? '').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function uid(p){ return p + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function localTheme(){ return localStorage.getItem(THEME_KEY) || defaults.settings.theme; }
+
+function mapSettings(row, zones){
+  settingsId = row?.id || null;
+  return {
+    ...defaults.settings,
+    name: row?.name ?? defaults.settings.name,
+    slogan: row?.slogan ?? defaults.settings.slogan,
+    whatsapp: row?.whatsapp ?? defaults.settings.whatsapp,
+    pixKey: row?.pix_key ?? defaults.settings.pixKey,
+    address: row?.address ?? defaults.settings.address,
+    isOpen: row?.is_open ?? defaults.settings.isOpen,
+    deliveryTime: row?.delivery_time ?? defaults.settings.deliveryTime,
+    minOrder: Number(row?.min_order ?? defaults.settings.minOrder),
+    defaultDeliveryFee: Number(row?.default_delivery_fee ?? defaults.settings.defaultDeliveryFee),
+    logo: row?.logo_url || '',
+    locationUrl: row?.location_url ?? defaults.settings.locationUrl,
+    ifoodUrl: row?.ifood_url ?? defaults.settings.ifoodUrl,
+    theme: localTheme(),
+    deliveryZones: zones?.length ? zones.map(mapZone) : defaults.settings.deliveryZones
+  };
+}
+function mapZone(row){ return { id:String(row.id), name:row.name, fee:Number(row.fee || 0), active:row.active !== false }; }
+function mapProduct(row){ return { id:String(row.id), name:row.name, category:row.category || 'Outros', description:row.description || '', price:Number(row.price || 0), emoji:row.emoji || '🍔', image:row.image_url || row.image || '', available:row.available !== false, recipe:Array.isArray(row.recipe) ? row.recipe : [] }; }
+function mapExtra(row){ return { id:String(row.id), name:row.name, price:Number(row.price || 0), available:row.available !== false, stockId:row.stock_id || '', stockQty:Number(row.stock_qty || 1) }; }
+function mapStock(row){ return { id:String(row.id), name:row.name, qty:Number(row.qty || 0), min:Number(row.min_qty ?? row.min ?? 0), unit:row.unit || 'un' }; }
+function mapCoupon(row){ return { id:String(row.id), code:String(row.code || '').toUpperCase(), type:row.type || 'percent', value:Number(row.value || 0), min:Number(row.min_order ?? row.min ?? 0), active:row.active !== false }; }
+function mapOrder(row){ return { id:String(row.id), number:row.number ?? '', createdAt:row.created_at, customerName:row.customer_name || '', phone:row.phone || '', deliveryType:row.delivery_type || '', zoneName:row.zone_name || '', address:row.address || '', payment:row.payment || '', changeFor:row.change_for || '', notes:row.notes || '', coupon:row.coupon || '', items:Array.isArray(row.items) ? row.items : [], subtotal:Number(row.subtotal || 0), deliveryFee:Number(row.delivery_fee || 0), discount:Number(row.discount || 0), total:Number(row.total || 0), status:row.status || 'Novo', statusHistory:Array.isArray(row.status_history) ? row.status_history : [], cancelReason:row.cancel_reason || '' }; }
+
+function settingsPayload(s){
+  return { name:s.name, slogan:s.slogan, whatsapp:s.whatsapp, pix_key:s.pixKey, address:s.address, is_open:s.isOpen, delivery_time:s.deliveryTime, min_order:Number(s.minOrder || 0), default_delivery_fee:Number(s.defaultDeliveryFee || 0), logo_url:s.logo || '', location_url:s.locationUrl || '', ifood_url:s.ifoodUrl || '', updated_at:new Date().toISOString() };
+}
+function productPayload(p){ return { name:p.name, category:p.category, description:p.description, price:Number(p.price || 0), emoji:p.emoji || '🍔', image_url:p.image || '', available:p.available !== false, recipe:p.recipe || [], updated_at:new Date().toISOString() }; }
+function extraPayload(e){ return { name:e.name, price:Number(e.price || 0), available:e.available !== false, stock_id:e.stockId || null, stock_qty:Number(e.stockQty || 1) }; }
+function couponPayload(c){ return { code:String(c.code || '').toUpperCase(), type:c.type, value:Number(c.value || 0), min_order:Number(c.min || 0), active:c.active !== false }; }
+function stockPayload(s){ return { name:s.name, qty:Number(s.qty || 0), min_qty:Number(s.min || 0), unit:s.unit || 'un', updated_at:new Date().toISOString() }; }
+function zonePayload(z){ return { name:z.name, fee:Number(z.fee || 0), active:z.active !== false }; }
+
+async function safeSelect(table, queryBuilder, fallback){
+  try{
+    const { data, error } = await queryBuilder;
+    if(error) throw error;
+    return Array.isArray(data) ? data : (data ? [data] : []);
+  }catch(error){
+    console.warn('Erro ao carregar', table, error);
+    return fallback || [];
+  }
+}
+
+async function loadAll(){
+  const settingsRes = await supabaseClient.from('store_settings').select('*').limit(1).maybeSingle();
+  const zonesRes = await supabaseClient.from('delivery_zones').select('*').order('name', { ascending:true });
+  const productsRes = await supabaseClient.from('products').select('*').order('created_at', { ascending:true });
+  const extrasRes = await supabaseClient.from('extras').select('*').order('created_at', { ascending:true });
+  const stockRes = await supabaseClient.from('stock').select('*').order('created_at', { ascending:true });
+  const couponsRes = await supabaseClient.from('coupons').select('*').order('created_at', { ascending:true });
+  const ordersRes = await supabaseClient.from('orders').select('*').order('created_at', { ascending:false });
+
+  if(settingsRes.error){ console.warn('Erro ao carregar store_settings:', settingsRes.error); }
+  if(zonesRes.error){ console.warn('Erro ao carregar delivery_zones:', zonesRes.error); }
+  if(productsRes.error){ console.warn('Erro ao carregar products:', productsRes.error); }
+  if(extrasRes.error){ console.warn('Erro ao carregar extras:', extrasRes.error); }
+  if(stockRes.error){ console.warn('Erro ao carregar stock:', stockRes.error); }
+  if(couponsRes.error){ console.warn('Erro ao carregar coupons:', couponsRes.error); }
+  if(ordersRes.error){ console.warn('Erro ao carregar orders:', ordersRes.error); }
+
+  appData.zones = !zonesRes.error && zonesRes.data?.length ? zonesRes.data.map(mapZone) : defaults.settings.deliveryZones;
+  appData.settings = mapSettings(settingsRes.data || null, appData.zones);
+  appData.products = !productsRes.error && productsRes.data?.length ? productsRes.data.map(mapProduct) : defaults.products;
+  appData.extras = !extrasRes.error && extrasRes.data?.length ? extrasRes.data.map(mapExtra) : defaults.extras;
+  appData.stock = !stockRes.error && stockRes.data?.length ? stockRes.data.map(mapStock) : defaults.stock;
+  appData.coupons = !couponsRes.error && couponsRes.data?.length ? couponsRes.data.map(mapCoupon) : defaults.coupons;
+  appData.orders = !ordersRes.error && ordersRes.data?.length ? ordersRes.data.map(mapOrder) : [];
+}
+
+async function refresh(){ await loadAll(); renderAll(); }
+
+function getSettings(){ return appData.settings || defaults.settings; }
+function getProducts(){ return appData.products || []; }
+function getOrders(){ return appData.orders || []; }
+function getStock(){ return appData.stock || []; }
+function getExtras(){ return appData.extras || []; }
+function getCoupons(){ return appData.coupons || []; }
+
+function login(){ if(password.value==='dono123'){ localStorage.setItem(AUTH_KEY,'true'); openApp(); } else alert('Senha incorreta. Senha demo: dono123'); }
+function logout(){ localStorage.removeItem(AUTH_KEY); document.getElementById('login').style.display='grid'; document.getElementById('app').style.display='none'; }
+async function openApp(){ document.getElementById('login').style.display='none'; app.style.display='grid'; await refresh(); }
+
+function showPage(page){
+  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(e=>e.classList.remove('active'));
+  document.getElementById('nav-'+page)?.classList.add('active');
+  const titles={dashboard:['Dashboard','Resumo geral da hamburgueria.'],pedidos:['Pedidos','Controle completo dos pedidos e valores.'],faturamento:['Faturamento','Relatórios, formas de pagamento e vendas por período.'],produtos:['Produtos','Cadastre produtos, imagens e receita de estoque.'],adicionais:['Adicionais','Venda extras junto dos hambúrgueres.'],cupons:['Cupons','Crie descontos, frete grátis e campanhas.'],entregas:['Entregas','Taxas por bairro e pedidos em rota.'],estoque:['Estoque','Controle ingredientes e alerta de estoque baixo.'],config:['Configurações','Nome, WhatsApp, Pix, entrega e status da loja.'],visual:['Visual','Personalize as cores do painel.']};
+  pageTitle.textContent=titles[page][0]; pageSubtitle.textContent=titles[page][1]; renderAll();
+}
+
+function renderClock(){ clock.textContent=new Date().toLocaleString('pt-BR',{weekday:'short',hour:'2-digit',minute:'2-digit'}); }
+function statusClass(s){ return s==='Saiu para entrega'?'Saiu':String(s||'Novo').replaceAll(' ',''); }
+function nextStatus(s){ return s==='Novo'?'Preparando':s==='Preparando'?'Pronto':s==='Pronto'?'Saiu para entrega':s==='Saiu para entrega'?'Entregue':'Entregue'; }
+
+async function updateStatus(id,status){
+  const order = getOrders().find(x=>x.id===id);
+  const history = [...(order?.statusHistory || []), {status, at:new Date().toISOString()}];
+  const { error } = await supabaseClient.from('orders').update({ status, status_history:history, updated_at:new Date().toISOString() }).eq('id', id);
+  if(error) return alert('Erro ao atualizar pedido: '+error.message);
+  await refresh();
+}
+async function cancelOrder(id){
+  const reason=prompt('Motivo do cancelamento:','Cliente desistiu'); if(reason===null)return;
+  const order = getOrders().find(x=>x.id===id);
+  const history = [...(order?.statusHistory || []), {status:'Cancelado', at:new Date().toISOString(), reason}];
+  const payload = { status:'Cancelado', status_history:history, updated_at:new Date().toISOString() };
+  // Se a tabela tiver a coluna cancel_reason, este campo será salvo. Se não tiver, a tentativa abaixo faz fallback.
+  let res = await supabaseClient.from('orders').update({ ...payload, cancel_reason:reason }).eq('id', id);
+  if(res.error && String(res.error.message||'').includes('cancel_reason')) res = await supabaseClient.from('orders').update(payload).eq('id', id);
+  if(res.error) return alert('Erro ao cancelar pedido: '+res.error.message);
+  await refresh();
+}
+async function clearFinishedOrders(){
+  if(!confirm('Limpar pedidos entregues/finalizados/cancelados?')) return;
+  const { error } = await supabaseClient.from('orders').delete().in('status',['Entregue','Finalizado','Cancelado']);
+  if(error) return alert('Erro ao limpar pedidos: '+error.message);
+  await refresh();
+}
+
+function itemList(o){ return (o.items||[]).map(i=>`<li><strong>${i.qty}x ${esc(i.name)}</strong>${i.extras?.length?' + '+i.extras.map(e=>esc(e.name)).join(', '):''}${i.notes?'<br><span class="muted">Obs: '+esc(i.notes)+'</span>':''} — ${money(i.total)}</li>`).join(''); }
+function orderCard(o){ return `<article class="order"><div><h3>Pedido #${o.number}<span class="status ${statusClass(o.status)}">${esc(o.status)}</span></h3><p><strong>${esc(o.customerName)}</strong> • ${esc(o.phone)} • ${new Date(o.createdAt).toLocaleString('pt-BR')}</p><ul>${itemList(o)}</ul><p><strong>${esc(o.deliveryType)}:</strong> ${esc(o.address||'Retirada')} ${o.zoneName?'• '+esc(o.zoneName):''}</p><p><strong>Pagamento:</strong> ${esc(o.payment)} • <strong>Total:</strong> ${money(o.total)} ${o.coupon?'• Cupom: '+esc(o.coupon):''}</p>${o.notes?`<p><strong>Obs:</strong> ${esc(o.notes)}</p>`:''}${o.cancelReason?`<p style="color:#fecaca"><strong>Cancelamento:</strong> ${esc(o.cancelReason)}</p>`:''}</div><div class="actions"><button class="btn green" onclick="updateStatus('${o.id}','${nextStatus(o.status)}')">Avançar</button><button class="btn blue" onclick="printComanda('${o.id}')">Imprimir</button><button class="btn red" onclick="cancelOrder('${o.id}')">Cancelar</button></div></article>`; }
+
+function renderStats(){ const os=getOrders(),today=new Date().toISOString().slice(0,10),todayOs=os.filter(o=>o.createdAt?.slice(0,10)===today),valid=todayOs.filter(o=>o.status!=='Cancelado'),rev=valid.reduce((s,o)=>s+Number(o.total||0),0),ticket=valid.length?rev/valid.length:0,open=os.filter(o=>!['Entregue','Finalizado','Cancelado'].includes(o.status)).length; statRevenue.textContent=money(rev); statOrders.textContent=valid.length; statTicket.textContent=money(ticket); statOpen.textContent=open; }
+function renderDashboard(){ const s=getSettings(); statusNotice.innerHTML=s.isOpen?`🟢 <strong>Loja aberta:</strong> clientes podem fazer pedidos. Pedido mínimo: <strong>${money(s.minOrder)}</strong>.`:`🔴 <strong>Loja fechada:</strong> altere o status em Configurações para receber pedidos.`; const latest=getOrders().slice(0,4); latestOrders.innerHTML=latest.length?latest.map(orderCard).join(''):'<div class="empty">Nenhum pedido recebido ainda.</div>'; }
+function renderFilters(){ const fs=['Todos','Novo','Preparando','Pronto','Saiu para entrega','Entregue','Cancelado']; filters.innerHTML=fs.map(f=>`<button class="btn filter ${currentFilter===f?'active':''}" onclick="currentFilter='${f}';renderFilters();renderOrders()">${f}</button>`).join(''); }
+function renderOrders(){ let os=getOrders(); if(currentFilter!=='Todos') os=os.filter(o=>o.status===currentFilter); ordersList.innerHTML=os.length?os.map(orderCard).join(''):'<div class="empty">Nenhum pedido encontrado.</div>'; }
+
+function periodOrders(start,end){ return getOrders().filter(o=>o.status!=='Cancelado').filter(o=>{const d=o.createdAt?.slice(0,10); return(!start||d>=start)&&(!end||d<=end);}); }
+function renderFinance(){ const os=getOrders(),valid=os.filter(o=>o.status!=='Cancelado'),today=new Date(),todayS=today.toISOString().slice(0,10),weekAgo=new Date(Date.now()-6*864e5).toISOString().slice(0,10),monthS=todayS.slice(0,7)+'-01'; const sum=a=>a.reduce((s,o)=>s+Number(o.total||0),0); financeToday.textContent=money(sum(periodOrders(todayS,todayS))); financeWeek.textContent=money(sum(periodOrders(weekAgo,todayS))); financeMonth.textContent=money(sum(periodOrders(monthS,todayS))); financeTotal.textContent=money(sum(valid)); const start=financeStart.value,end=financeEnd.value,per=periodOrders(start,end),total=sum(per),ticket=per.length?total/per.length:0; financePeriodTotal.textContent=money(total); financePeriodOrders.textContent=per.length; financePeriodTicket.textContent=money(ticket); const pay={}; per.forEach(o=>pay[o.payment]=(pay[o.payment]||0)+Number(o.total||0)); paymentSummary.innerHTML=Object.keys(pay).length?Object.entries(pay).map(([k,v])=>`<div class="finance-line"><span>${esc(k)}</span><strong>${money(v)}</strong></div>`).join(''):'<div class="empty">Sem vendas no período.</div>'; renderInsights(valid); financeTable.innerHTML=per.length?`<div class="table-wrap"><table><thead><tr><th>Data</th><th>Pedido</th><th>Cliente</th><th>Pagamento</th><th>Total</th></tr></thead><tbody>${per.map(o=>`<tr><td>${new Date(o.createdAt).toLocaleString('pt-BR')}</td><td>#${o.number}</td><td>${esc(o.customerName)}</td><td>${esc(o.payment)}</td><td>${money(o.total)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum pedido no período.</div>'; }
+function renderInsights(valid){ const prod={},hours={},canc={}; valid.forEach(o=>{const h=new Date(o.createdAt).getHours()+':00'; hours[h]=(hours[h]||0)+1; (o.items||[]).forEach(i=>prod[i.name]=(prod[i.name]||0)+i.qty);}); getOrders().filter(o=>o.status==='Cancelado').forEach(o=>canc[o.cancelReason||'Sem motivo']=(canc[o.cancelReason||'Sem motivo']||0)+1); const top=Object.entries(prod).sort((a,b)=>b[1]-a[1])[0],peak=Object.entries(hours).sort((a,b)=>b[1]-a[1])[0]; bestSeller.innerHTML=top?`<div class="finance-line"><span>${esc(top[0])}</span><strong>${top[1]} un</strong></div>`:'<div class="empty">Sem dados.</div>'; peakHour.innerHTML=peak?`<div class="finance-line"><span>${peak[0]}</span><strong>${peak[1]} pedidos</strong></div>`:'<div class="empty">Sem dados.</div>'; cancelSummary.innerHTML=Object.keys(canc).length?Object.entries(canc).map(([k,v])=>`<div class="finance-line"><span>${esc(k)}</span><strong>${v}</strong></div>`).join(''):'<div class="empty">Sem cancelamentos.</div>'; }
+function exportFinanceCSV(){ const rows=[['Data','Pedido','Cliente','Pagamento','Subtotal','Entrega','Desconto','Total']]; periodOrders(financeStart.value,financeEnd.value).forEach(o=>rows.push([new Date(o.createdAt).toLocaleString('pt-BR'),o.number,o.customerName,o.payment,o.subtotal,o.deliveryFee,o.discount,o.total])); const csv=rows.map(r=>r.map(c=>`"${String(c).replaceAll('"','""')}"`).join(';')).join('
+'); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='faturamento-burgerpro.csv'; a.click(); }
+
+function stockOptions(){ return getStock().map(s=>`<option value="${s.id}">${esc(s.name)} (${esc(s.unit)})</option>`).join(''); }
+function recipeToText(recipe=[]){ const stock=getStock(); return recipe.map(r=>`${stock.find(s=>s.id===r.stockId)?.name||r.stockId}:${r.qty}`).join('
+'); }
+function parseRecipe(text){ const stock=getStock(); return String(text||'').split('
+').map(l=>l.trim()).filter(Boolean).map(l=>{const [name,qty]=l.split(':'); const item=stock.find(s=>s.name.toLowerCase()===String(name).trim().toLowerCase())||stock.find(s=>s.id===String(name).trim()); return item?{stockId:item.id,qty:Number(qty||1)}:null;}).filter(Boolean); }
+function previewProductImage(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=x=>{selectedProductImage=x.target.result; productPreview.innerHTML=`<img src="${selectedProductImage}">`;}; r.readAsDataURL(f); }
+function productPhoto(p){ return p.image?`<img src="${p.image}" alt="${esc(p.name)}">`:esc(p.emoji||'🍔'); }
+
+async function addProduct(ev){ ev.preventDefault(); const d=new FormData(ev.target); const payload=productPayload({ name:d.get('name'), category:d.get('category'), description:d.get('description'), price:Number(d.get('price')), emoji:d.get('emoji')||'🍔', image:selectedProductImage, available:true, recipe:parseRecipe(d.get('recipeText')) }); const { error }=await supabaseClient.from('products').insert([payload]); if(error)return alert('Erro ao adicionar produto: '+error.message); selectedProductImage=''; ev.target.reset(); productPreview.innerHTML='Sem imagem'; await refresh(); alert('Produto adicionado.'); }
+function renderProducts(){ const ps=getProducts(); productsList.innerHTML=ps.length?ps.map(p=>`<article class="product"><div class="photo">${productPhoto(p)}</div><div><h3>${esc(p.name)}</h3><p>${esc(p.category)} • ${money(p.price)} • ${p.available?'Disponível':'Indisponível'}</p><p>${esc(p.description)}</p><p class="muted">Receita: ${esc(recipeToText(p.recipe)||'sem baixa de estoque')}</p></div><div class="actions"><button class="btn blue" onclick="editProduct('${p.id}')">Editar</button><button class="btn" onclick="toggleProduct('${p.id}')">${p.available?'Desativar':'Ativar'}</button><button class="btn red" onclick="deleteProduct('${p.id}')">Excluir</button></div></article>`).join(''):'<div class="empty">Nenhum produto.</div>'; }
+async function toggleProduct(id){ const p=getProducts().find(x=>x.id===id); const { error }=await supabaseClient.from('products').update({ available:!p.available, updated_at:new Date().toISOString() }).eq('id', id); if(error)return alert('Erro: '+error.message); await refresh(); }
+async function deleteProduct(id){ if(confirm('Excluir produto?')){ const { error }=await supabaseClient.from('products').delete().eq('id', id); if(error)return alert('Erro: '+error.message); await refresh(); } }
+function editProduct(id){ const p=getProducts().find(x=>x.id===id); modalTitle.textContent='Editar produto'; modalBody.innerHTML=`<form class="form-grid" onsubmit="saveEditProduct(event,'${id}')"><div><label>Nome</label><input name="name" value="${esc(p.name)}"></div><div><label>Preço</label><input name="price" type="number" step="0.01" value="${p.price}"></div><div><label>Categoria</label><input name="category" value="${esc(p.category)}"></div><div><label>Emoji</label><input name="emoji" value="${esc(p.emoji||'🍔')}"></div><div class="full"><label>Descrição</label><textarea name="description" rows="3">${esc(p.description)}</textarea></div><div class="full"><label>Receita</label><textarea name="recipeText" rows="4">${esc(recipeToText(p.recipe))}</textarea></div><div class="full"><button class="btn primary">Salvar</button></div></form>`; modalBg.classList.add('open'); }
+async function saveEditProduct(ev,id){ ev.preventDefault(); const d=new FormData(ev.target); const p=getProducts().find(x=>x.id===id); const payload=productPayload({ ...p, name:d.get('name'), price:Number(d.get('price')), category:d.get('category'), emoji:d.get('emoji'), description:d.get('description'), recipe:parseRecipe(d.get('recipeText')) }); const { error }=await supabaseClient.from('products').update(payload).eq('id', id); if(error)return alert('Erro ao salvar: '+error.message); closeModal(); await refresh(); }
+
+async function addExtra(ev){ ev.preventDefault(); const d=new FormData(ev.target); const payload=extraPayload({ name:d.get('name'), price:Number(d.get('price')), stockId:d.get('stockId')||'', stockQty:Number(d.get('stockQty')||1), available:true }); const { error }=await supabaseClient.from('extras').insert([payload]); if(error)return alert('Erro: '+error.message); ev.target.reset(); await refresh(); }
+function renderExtras(){ extraStock.innerHTML=stockOptions(); const xs=getExtras(); extrasList.innerHTML=xs.length?xs.map(e=>`<div class="row-item"><div><h3>${esc(e.name)}</h3><p>${money(e.price)} • baixa ${e.stockQty||0} de ${esc(getStock().find(s=>s.id===e.stockId)?.name||'-')}</p></div><div class="actions"><button class="btn" onclick="toggleExtra('${e.id}')">${e.available?'Desativar':'Ativar'}</button><button class="btn red" onclick="deleteExtra('${e.id}')">Excluir</button></div></div>`).join(''):'<div class="empty">Nenhum adicional.</div>'; }
+async function toggleExtra(id){ const e=getExtras().find(x=>x.id===id); const { error }=await supabaseClient.from('extras').update({available:!e.available}).eq('id',id); if(error)return alert('Erro: '+error.message); await refresh(); }
+async function deleteExtra(id){ const { error }=await supabaseClient.from('extras').delete().eq('id',id); if(error)return alert('Erro: '+error.message); await refresh(); }
+
+async function addCoupon(ev){ ev.preventDefault(); const d=new FormData(ev.target); const payload=couponPayload({ code:d.get('code'), type:d.get('type'), value:Number(d.get('value')), min:Number(d.get('min')), active:true }); const { error }=await supabaseClient.from('coupons').insert([payload]); if(error)return alert('Erro: '+error.message); ev.target.reset(); await refresh(); }
+function renderCoupons(){ const cs=getCoupons(); couponsList.innerHTML=cs.length?cs.map(c=>`<div class="row-item"><div><h3>${esc(c.code)} <span class="badge ${c.active?'green':'red'}">${c.active?'Ativo':'Inativo'}</span></h3><p>Tipo: ${c.type} • valor: ${c.value} • mínimo: ${money(c.min)}</p></div><div class="actions"><button class="btn" onclick="toggleCoupon('${c.id}')">${c.active?'Desativar':'Ativar'}</button><button class="btn red" onclick="deleteCoupon('${c.id}')">Excluir</button></div></div>`).join(''):'<div class="empty">Nenhum cupom.</div>'; }
+async function toggleCoupon(id){ const c=getCoupons().find(x=>x.id===id); const { error }=await supabaseClient.from('coupons').update({active:!c.active}).eq('id',id); if(error)return alert('Erro: '+error.message); await refresh(); }
+async function deleteCoupon(id){ const { error }=await supabaseClient.from('coupons').delete().eq('id',id); if(error)return alert('Erro: '+error.message); await refresh(); }
+
+async function addZone(ev){ ev.preventDefault(); const d=new FormData(ev.target); const { error }=await supabaseClient.from('delivery_zones').insert([{name:d.get('name'),fee:Number(d.get('fee')),active:true}]); if(error)return alert('Erro: '+error.message); ev.target.reset(); await refresh(); }
+function renderZones(){ const s=getSettings(); zonesList.innerHTML=(s.deliveryZones||[]).map(z=>`<div class="row-item"><div><h3>${esc(z.name)}</h3><p>Taxa: ${money(z.fee)}</p></div><button class="btn red" onclick="deleteZone('${z.id}')">Excluir</button></div>`).join('')||'<div class="empty">Nenhuma taxa.</div>'; const ds=getOrders().filter(o=>o.deliveryType==='Entrega'&&['Pronto','Saiu para entrega'].includes(o.status)); deliveryOrders.innerHTML=ds.length?ds.map(orderCard).join(''):'<div class="empty">Nenhuma entrega em aberto.</div>'; }
+async function deleteZone(id){ const { error }=await supabaseClient.from('delivery_zones').delete().eq('id',id); if(error)return alert('Erro: '+error.message); await refresh(); }
+
+async function addStock(ev){ ev.preventDefault(); const d=new FormData(ev.target); const payload=stockPayload({ name:d.get('name'), qty:Number(d.get('qty')), min:Number(d.get('min')), unit:d.get('unit')||'un' }); const { error }=await supabaseClient.from('stock').insert([payload]); if(error)return alert('Erro: '+error.message); ev.target.reset(); await refresh(); }
+function renderStock(){ const st=getStock(); stockList.innerHTML=st.length?st.map(s=>`<div class="row-item"><div><h3>${esc(s.name)} <span class="badge ${Number(s.qty)<=Number(s.min)?'red':'green'}">${Number(s.qty)<=Number(s.min)?'Estoque baixo':'OK'}</span></h3><p>${s.qty} ${esc(s.unit)} • mínimo ${s.min}</p></div><div class="actions"><button class="btn blue" onclick="adjustStock('${s.id}')">Ajustar</button><button class="btn red" onclick="deleteStock('${s.id}')">Excluir</button></div></div>`).join(''):'<div class="empty">Nenhum item no estoque.</div>'; }
+async function adjustStock(id){ const st=getStock(),s=st.find(x=>x.id===id),q=prompt('Nova quantidade para '+s.name,s.qty); if(q===null)return; const { error }=await supabaseClient.from('stock').update({qty:Number(q),updated_at:new Date().toISOString()}).eq('id',id); if(error)return alert('Erro: '+error.message); await refresh(); }
+async function deleteStock(id){ const { error }=await supabaseClient.from('stock').delete().eq('id',id); if(error)return alert('Erro: '+error.message); await refresh(); }
+
+function applySettings(){ const s=getSettings(); document.body.className='theme-'+(s.theme||'yellow'); sideName.textContent=s.name+' Dono'; sideLogo.innerHTML=s.logo?`<img src="${s.logo}">`:'🍔'; storeName.value=s.name; storeSlogan.value=s.slogan; storeWhatsapp.value=s.whatsapp; storePix.value=s.pixKey||''; minOrder.value=s.minOrder; deliveryTime.value=s.deliveryTime; storeAddress.value=s.address||''; locationUrl.value=s.locationUrl||''; ifoodUrl.value=s.ifoodUrl||''; storeStatusText.textContent=s.isOpen?'🟢 Loja aberta':'🔴 Loja fechada'; logoPreview.innerHTML=s.logo?`<img src="${s.logo}">`:'🍔'; }
+async function saveStoreSettings(ev){ ev.preventDefault(); const s={...getSettings(), name:storeName.value, slogan:storeSlogan.value, whatsapp:storeWhatsapp.value, pixKey:storePix.value, minOrder:Number(minOrder.value), deliveryTime:deliveryTime.value, address:storeAddress.value, locationUrl:locationUrl.value, ifoodUrl:ifoodUrl.value, logo:selectedLogo||getSettings().logo}; const payload=settingsPayload(s); let res; if(settingsId){ res=await supabaseClient.from('store_settings').update(payload).eq('id',settingsId); } else { res=await supabaseClient.from('store_settings').insert([payload]).select('id').single(); }
+  if(res.error)return alert('Erro ao salvar configurações: '+res.error.message); selectedLogo=''; await refresh(); alert('Configurações salvas.'); }
+async function toggleStoreStatus(){ const s=getSettings(); const payload={is_open:!s.isOpen,updated_at:new Date().toISOString()}; let res; if(settingsId){ res=await supabaseClient.from('store_settings').update(payload).eq('id',settingsId); } else { res=await supabaseClient.from('store_settings').insert([{...settingsPayload({...s,isOpen:!s.isOpen})}]).select('id').single(); }
+  if(res.error)return alert('Erro ao alterar status: '+res.error.message); await refresh(); }
+function previewLogo(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=x=>{selectedLogo=x.target.result; logoPreview.innerHTML=`<img src="${selectedLogo}">`;}; r.readAsDataURL(f); }
+function setTheme(t){ localStorage.setItem(THEME_KEY,t); appData.settings.theme=t; applySettings(); }
+function closeModal(){ modalBg.classList.remove('open'); }
+function printComanda(id){ const o=getOrders().find(x=>x.id===id); if(!o)return; const s=getSettings(); const html=`<html><head><title>Comanda #${o.number}</title><style>body{font-family:Arial;padding:18px}h1{font-size:22px}hr{border:0;border-top:1px dashed #999}li{margin:8px 0}.big{font-size:20px;font-weight:900}</style></head><body><h1>${esc(s.name)}</h1><div class="big">Pedido #${o.number}</div><p>${new Date(o.createdAt).toLocaleString('pt-BR')}</p><hr><ul>${itemList(o)}</ul><hr><p><strong>Subtotal:</strong> ${money(o.subtotal)}<br><strong>Entrega:</strong> ${money(o.deliveryFee)}<br><strong>Desconto:</strong> ${money(o.discount)}<br><strong>Total:</strong> ${money(o.total)}</p><p><strong>Cliente:</strong> ${esc(o.customerName)}<br><strong>Tipo:</strong> ${esc(o.deliveryType)}<br><strong>Endereço:</strong> ${esc(o.address||'Retirada')}<br><strong>Pagamento:</strong> ${esc(o.payment)}</p>${o.notes?`<p><strong>Obs:</strong> ${esc(o.notes)}</p>`:''}</body></html>`; const w=open('','_blank','width=420,height=700'); w.document.write(html); w.document.close(); w.print(); }
+function renderAll(){ renderClock(); renderStats(); renderDashboard(); renderFilters(); renderOrders(); renderFinance(); renderProducts(); renderExtras(); renderCoupons(); renderZones(); renderStock(); applySettings(); }
+
+setInterval(renderClock,1000);
+setInterval(()=>{ if(localStorage.getItem(AUTH_KEY)==='true') refresh(); },30000);
+if(localStorage.getItem(AUTH_KEY)==='true') openApp();
+</script>
+
+</head><body><h1>${esc(s.name)}</h1><div class="big">Pedido #${o.number}</div><p>${new Date(o.createdAt).toLocaleString('pt-BR')}</p><hr><ul>${itemList(o)}</ul><hr><p><strong>Subtotal:</strong> ${money(o.subtotal)}<br><strong>Entrega:</strong> ${money(o.deliveryFee)}<br><strong>Desconto:</strong> ${money(o.discount)}<br><strong>Total:</strong> ${money(o.total)}</p><p><strong>Cliente:</strong> ${esc(o.customerName)}<br><strong>Tipo:</strong> ${esc(o.deliveryType)}<br><strong>Endereço:</strong> ${esc(o.address||'Retirada')}<br><strong>Pagamento:</strong> ${esc(o.payment)}</p>${o.notes?`<p><strong>Obs:</strong> ${esc(o.notes)}</p>`:''}</body></html>`;const w=open('','_blank','width=420,height=700');w.document.write(html);w.document.close();w.print()}
+function renderAll(){renderClock();renderStats();renderDashboard();renderFilters();renderOrders();renderFinance();renderProducts();renderExtras();renderCoupons();renderZones();renderStock();applySettings()}setInterval(renderClock,1000);seed();if(localStorage.getItem(K.auth)==='true')openApp();window.addEventListener('storage',renderAll);
+</script>
+</body>
+</html>
