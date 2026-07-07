@@ -21,6 +21,29 @@
   <button id="mobileCart" class="mobile-cart" onclick="startCheckoutFlow()"><span>Ver pedido</span><span id="mobileTotal">R$ 0,00</span></button>
   <section id="itemModal" class="modal-bg"><div class="modal"><div class="modal-head"><div><h2 id="itemTitle">Adicionar item</h2><p id="itemDesc" style="margin:6px 0 0;color:#71717a"></p></div><button class="close" onclick="closeItemModal()">×</button></div><form onsubmit="addConfiguredItem(event)"><input type="hidden" id="selectedProductId"><div class="two"><div><label>Quantidade</label><input id="itemQty" type="number" min="1" value="1" required></div><div><label>Preço base</label><input id="itemPrice" disabled></div></div><div><label>Adicionais</label><div id="extrasBox" class="extras"></div></div><div><label>Observação do item</label><textarea id="itemNotes" rows="3" placeholder="Ex: sem cebola, ponto da carne, molho separado"></textarea></div><div id="itemPreview" class="preview"></div><button class="checkout" type="submit">Adicionar ao pedido</button></form></div></section>
 
+
+  <section id="tipoPedidoModal" class="modal-bg">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h2>Como deseja receber?</h2>
+          <p style="margin:6px 0 0;color:#71717a">Escolha entrega ou retirada no balcão.</p>
+        </div>
+        <button class="close" onclick="closeTipoPedidoModal()">×</button>
+      </div>
+
+      <div style="padding:20px;display:grid;gap:12px">
+        <button class="checkout" type="button" onclick="escolherTipoPedido('Entrega')" style="background:#ea1d2c">
+          🛵 Quero entrega
+        </button>
+
+        <button class="checkout" type="button" onclick="escolherTipoPedido('Retirada')" style="background:#18181b">
+          🛍️ Vou retirar no balcão
+        </button>
+      </div>
+    </div>
+  </section>
+
   <section id="cepModal" class="modal-bg">
     <div class="modal">
       <div class="modal-head">
@@ -122,7 +145,7 @@
     </div>
   </section>
 
-  <section id="checkoutModal" class="modal-bg"><div class="modal"><div class="modal-head"><div><h2>Finalizar pedido</h2><p style="margin:6px 0 0;color:#71717a">Preencha os dados para enviar.</p></div><button class="close" onclick="closeCheckout()">×</button></div><form onsubmit="finishOrder(event)"><div class="two"><div><label>Nome</label><input name="customerName" required placeholder="Seu nome"></div><div><label>WhatsApp</label><input name="phone" required placeholder="(00) 00000-0000"></div></div><div class="two"><div><label>Tipo</label><select name="deliveryType" id="deliveryType" onchange="if(this.value===\'Entrega\' && !(address.value||\'\').trim()){checkoutModal.classList.remove(\'open\');cepModal.classList.add(\'open\')} updateCheckoutPreview()"><option>Entrega</option><option>Retirada</option></select></div><div><label>Pagamento</label><select name="payment" id="payment" onchange="updateCheckoutPreview()"><option>Pix</option><option>Cartão na entrega</option><option>Dinheiro</option></select></div></div><div id="zoneWrap"><label>Bairro / região</label><select name="zone" id="zone" onchange="updateCheckoutPreview()"></select></div><div>
+  <section id="checkoutModal" class="modal-bg"><div class="modal"><div class="modal-head"><div><h2>Finalizar pedido</h2><p style="margin:6px 0 0;color:#71717a">Preencha os dados para enviar.</p></div><button class="close" onclick="closeCheckout()">×</button></div><form onsubmit="finishOrder(event)"><div class="two"><div><label>Nome</label><input name="customerName" required placeholder="Seu nome"></div><div><label>WhatsApp</label><input name="phone" required placeholder="(00) 00000-0000"></div></div><div class="two"><div><label>Tipo</label><select name="deliveryType" id="deliveryType" onchange="if(this.value==='Retirada'){address.value='Retirada no balcão'}else if(!(address.value||'').trim() || address.value==='Retirada no balcão'){checkoutModal.classList.remove('open');address.value='';cepModal.classList.add('open')} updateCheckoutPreview()"><option>Entrega</option><option>Retirada</option></select></div><div><label>Pagamento</label><select name="payment" id="payment" onchange="updateCheckoutPreview()"><option>Pix</option><option>Cartão na entrega</option><option>Dinheiro</option></select></div></div><div id="zoneWrap"><label>Bairro / região</label><select name="zone" id="zone" onchange="updateCheckoutPreview()"></select></div><div>
   <label>Endereço</label>
   <input name="address" id="address" placeholder="Endereço confirmado pelo CEP" readonly>
   <button type="button" class="checkout" onclick="abrirEnderecoManual()" style="padding:11px;margin-top:8px;background:#f4f4f5;color:#374151">
@@ -399,6 +422,10 @@ function prepararCheckout() {
   updateCheckoutPreview();
 }
 
+function closeTipoPedidoModal() {
+  tipoPedidoModal.classList.remove("open");
+}
+
 function startCheckoutFlow() {
   const s = getSettings();
 
@@ -406,13 +433,24 @@ function startCheckoutFlow() {
   if (!s.isOpen) return alert("A loja está fechada no momento.");
 
   prepararCheckout();
+  tipoPedidoModal.classList.add("open");
+}
 
-  if (deliveryType.value === "Entrega" && !(address.value || "").trim()) {
-    cepModal.classList.add("open");
+function escolherTipoPedido(tipo) {
+  tipoPedidoModal.classList.remove("open");
+
+  deliveryType.value = tipo;
+
+  if (tipo === "Retirada") {
+    address.value = "Retirada no balcão";
+    prepararCheckout();
+    checkoutModal.classList.add("open");
     return;
   }
 
-  checkoutModal.classList.add("open");
+  address.value = "";
+  prepararCheckout();
+  cepModal.classList.add("open");
 }
 
 function formatarCep() {
@@ -562,7 +600,7 @@ function buildOrderFromForm(event) {
   const type = data.get("deliveryType");
   const sub = getCartSubtotal();
   if (type === "Entrega" && sub < Number(s.minOrder || 0)) { alert("Pedido mínimo para entrega: " + money(s.minOrder)); return null; }
-  const addressValue = (data.get("address") || "").trim();
+  const addressValue = type === "Retirada" ? "Retirada no balcão" : (data.get("address") || "").trim();
   if (type === "Entrega" && !addressValue) { alert("Informe o endereço para entrega."); return null; }
   const fee = currentDeliveryFee();
   const coup = calcCoupon(sub, fee);
