@@ -180,11 +180,11 @@ const defaults = {
     ]
   },
   products: [
-    { id: "p1", name: "Jacquim", category: "Hambúrgueres", description: "Pão, blend 120g, queijo, alface, tomate, cebola caramelizada e molho especial.", price: 15.99, emoji: "🍔", image: "", available: true },
-    { id: "p2", name: "Carosella", category: "Hambúrgueres", description: "Pão, blend 120g, cheddar, alface, tomate, cebola caramelizada e molho especial.", price: 17.99, emoji: "🍔", image: "", available: true },
-    { id: "p3", name: "Perrone", category: "Hambúrgueres", description: "Pão, blend 120g, cheddar, bacon, cebola caramelizada e molho especial.", price: 20.99, emoji: "🍔", image: "", available: true },
-    { id: "p4", name: "Fogaça", category: "Hambúrgueres", description: "Pão, blend 120g, queijo, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.", price: 24.99, emoji: "🍔", image: "", available: true },
-    { id: "p5", name: "Laville", category: "Hambúrgueres", description: "Pão, duplo blend 120g, duplo cheddar, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.", price: 28.99, emoji: "🍔", image: "", available: true },
+    { id: "p1", name: "Jacquim", category: "Mais pedidos", description: "Pão, blend 120g, queijo, alface, tomate, cebola caramelizada e molho especial.", price: 15.99, emoji: "🍔", image: "", available: true },
+    { id: "p2", name: "Carosella", category: "Mais pedidos", description: "Pão, blend 120g, cheddar, alface, tomate, cebola caramelizada e molho especial.", price: 17.99, emoji: "🍔", image: "", available: true },
+    { id: "p3", name: "Perrone", category: "Mais pedidos", description: "Pão, blend 120g, cheddar, bacon, cebola caramelizada e molho especial.", price: 20.99, emoji: "🍔", image: "", available: true },
+    { id: "p4", name: "Fogaça", category: "Mais pedidos", description: "Pão, blend 120g, queijo, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.", price: 24.99, emoji: "🍔", image: "", available: true },
+    { id: "p5", name: "Laville", category: "Mais pedidos", description: "Pão, duplo blend 120g, duplo cheddar, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.", price: 28.99, emoji: "🍔", image: "", available: true },
     { id: "p6", name: "Batata Simples", category: "Porções", description: "Porção de batata frita simples.", price: 19.99, emoji: "🍟", image: "", available: true }
   ],
   extras: [
@@ -238,11 +238,57 @@ function mapSettings(row, zones) {
   };
 }
 
+function normalizeCategory(category, name) {
+  const raw = String(category || "").trim().toLowerCase();
+  const productName = String(name || "").trim().toLowerCase();
+
+  if (
+    raw.includes("bebida") ||
+    raw.includes("refrigerante") ||
+    productName.includes("coca") ||
+    productName.includes("guaran") ||
+    productName.includes("fanta") ||
+    productName.includes("sprite") ||
+    productName.includes("refrigerante") ||
+    productName.includes("suco") ||
+    productName.includes("água") ||
+    productName.includes("agua")
+  ) {
+    return "Bebidas";
+  }
+
+  if (
+    raw.includes("batata") ||
+    raw.includes("porção") ||
+    raw.includes("porcao") ||
+    productName.includes("batata")
+  ) {
+    return "Porções";
+  }
+
+  if (
+    raw.includes("mais pedido") ||
+    raw.includes("hamb") ||
+    raw.includes("burger") ||
+    raw.includes("lanche") ||
+    productName.includes("jacquim") ||
+    productName.includes("carosella") ||
+    productName.includes("perrone") ||
+    productName.includes("fogaça") ||
+    productName.includes("fogaca") ||
+    productName.includes("laville")
+  ) {
+    return "Mais pedidos";
+  }
+
+  return category ? String(category).trim() : "Outros";
+}
+
 function mapProduct(row) {
   return {
     id: String(row.id),
     name: row.name || "Produto",
-    category: row.category || "Outros",
+    category: normalizeCategory(row.category, row.name),
     description: row.description || "",
     price: Number(row.price || 0),
     image: row.image_url || row.image || "",
@@ -322,7 +368,25 @@ function renderStore() {
   storeLogo.innerHTML = s.logo ? `<img src="${s.logo}" alt="Logo">` : "🍔";
 }
 
-function getCategories() { return ["Todos", ...new Set(getProducts().map(p => p.category || "Outros"))]; }
+function getCategories() {
+  const order = ["Todos", "Mais pedidos", "Bebidas", "Porções", "Outros"];
+  const seen = new Set();
+  const cats = [];
+
+  getProducts().forEach(p => {
+    const cat = normalizeCategory(p.category, p.name);
+    const key = cat.toLowerCase().trim();
+
+    if (!seen.has(key)) {
+      seen.add(key);
+      cats.push(cat);
+    }
+  });
+
+  return order
+    .filter(c => c === "Todos" || cats.includes(c))
+    .concat(cats.filter(c => !order.includes(c)));
+}
 
 function renderCategories() {
   categories.innerHTML = getCategories().map(c => `<button class="cat ${currentCat === c ? "active" : ""}" onclick="currentCat='${esc(c)}';renderCategories();renderMenu()">${esc(c)}</button>`).join("");
@@ -331,8 +395,10 @@ function renderCategories() {
 function renderMenu() {
   const q = (search.value || "").toLowerCase();
   const products = getProducts()
+    .map(p => ({ ...p, category: normalizeCategory(p.category, p.name) }))
     .filter(p => currentCat === "Todos" || p.category === currentCat)
-    .filter(p => (p.name + p.description + p.category).toLowerCase().includes(q));
+    .filter(p => (p.name + p.description + p.category).toLowerCase().includes(q))
+    .sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
 
   countItems.textContent = products.length + " itens";
   menu.innerHTML = products.length ? products.map(p => `
