@@ -185,7 +185,7 @@ const defaults = {
     { id: "p3", name: "Perrone", category: "Mais pedidos", description: "Pão, blend 120g, cheddar, bacon, cebola caramelizada e molho especial.", price: 20.99, emoji: "🍔", image: "", available: true },
     { id: "p4", name: "Fogaça", category: "Mais pedidos", description: "Pão, blend 120g, queijo, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.", price: 24.99, emoji: "🍔", image: "", available: true },
     { id: "p5", name: "Laville", category: "Mais pedidos", description: "Pão, duplo blend 120g, duplo cheddar, bacon, ovo, alface, tomate, cebola caramelizada e molho especial.", price: 28.99, emoji: "🍔", image: "", available: true },
-    { id: "p6", name: "Batata Simples", category: "Porções", description: "Porção de batata frita simples.", price: 19.99, emoji: "🍟", image: "", available: true }
+    { id: "p6", name: "Batata Simples", category: "Batata", description: "Porção de batata frita simples.", price: 19.99, emoji: "🍟", image: "", available: true }
   ],
   extras: [
     { id: "e1", name: "Queijo", price: 2, available: true },
@@ -238,50 +238,86 @@ function mapSettings(row, zones) {
   };
 }
 
-function normalizeCategory(category, name) {
-  const raw = String(category || "").trim().toLowerCase();
-  const productName = String(name || "").trim().toLowerCase();
+function textKey(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 
-  if (
-    raw.includes("bebida") ||
+function isDrinkProduct(p) {
+  const raw = textKey(p.category);
+  const name = textKey(p.name);
+
+  return raw.includes("bebida") ||
     raw.includes("refrigerante") ||
-    productName.includes("coca") ||
-    productName.includes("guaran") ||
-    productName.includes("fanta") ||
-    productName.includes("sprite") ||
-    productName.includes("refrigerante") ||
-    productName.includes("suco") ||
-    productName.includes("água") ||
-    productName.includes("agua")
-  ) {
-    return "Bebidas";
-  }
+    name.includes("coca") ||
+    name.includes("guaran") ||
+    name.includes("fanta") ||
+    name.includes("sprite") ||
+    name.includes("refrigerante") ||
+    name.includes("suco") ||
+    name.includes("agua");
+}
 
-  if (
-    raw.includes("batata") ||
-    raw.includes("porção") ||
+function isBatataProduct(p) {
+  const raw = textKey(p.category);
+  const name = textKey(p.name);
+
+  return raw.includes("batata") ||
     raw.includes("porcao") ||
-    productName.includes("batata")
-  ) {
-    return "Porções";
-  }
+    name.includes("batata");
+}
 
-  if (
-    raw.includes("mais pedido") ||
-    raw.includes("hamb") ||
+function isBurgerProduct(p) {
+  const raw = textKey(p.category);
+  const name = textKey(p.name);
+
+  return raw.includes("hamb") ||
     raw.includes("burger") ||
     raw.includes("lanche") ||
-    productName.includes("jacquim") ||
-    productName.includes("carosella") ||
-    productName.includes("perrone") ||
-    productName.includes("fogaça") ||
-    productName.includes("fogaca") ||
-    productName.includes("laville")
-  ) {
-    return "Mais pedidos";
-  }
+    name.includes("jacquim") ||
+    name.includes("carosella") ||
+    name.includes("perrone") ||
+    name.includes("fogaca") ||
+    name.includes("laville");
+}
+
+function normalizeCategory(category, name) {
+  const product = { category, name };
+  const raw = textKey(category);
+
+  if (isDrinkProduct(product)) return "Bebidas";
+  if (isBatataProduct(product)) return "Batata";
+  if (raw.includes("mais pedido")) return "Mais pedidos";
+  if (isBurgerProduct(product)) return "Hambúrguer";
 
   return category ? String(category).trim() : "Outros";
+}
+
+function productMatchesCategory(product, category) {
+  if (category === "Todos") return true;
+
+  const raw = textKey(product.category);
+
+  if (category === "Mais pedidos") {
+    return raw.includes("mais pedido");
+  }
+
+  if (category === "Hambúrguer") {
+    return isBurgerProduct(product);
+  }
+
+  if (category === "Batata") {
+    return isBatataProduct(product);
+  }
+
+  if (category === "Bebidas") {
+    return isDrinkProduct(product);
+  }
+
+  return normalizeCategory(product.category, product.name) === category;
 }
 
 function mapProduct(row) {
@@ -369,23 +405,7 @@ function renderStore() {
 }
 
 function getCategories() {
-  const order = ["Todos", "Mais pedidos", "Bebidas", "Porções", "Outros"];
-  const seen = new Set();
-  const cats = [];
-
-  getProducts().forEach(p => {
-    const cat = normalizeCategory(p.category, p.name);
-    const key = cat.toLowerCase().trim();
-
-    if (!seen.has(key)) {
-      seen.add(key);
-      cats.push(cat);
-    }
-  });
-
-  return order
-    .filter(c => c === "Todos" || cats.includes(c))
-    .concat(cats.filter(c => !order.includes(c)));
+  return ["Todos", "Mais pedidos", "Hambúrguer", "Batata", "Bebidas"];
 }
 
 function renderCategories() {
@@ -396,7 +416,7 @@ function renderMenu() {
   const q = (search.value || "").toLowerCase();
   const products = getProducts()
     .map(p => ({ ...p, category: normalizeCategory(p.category, p.name) }))
-    .filter(p => currentCat === "Todos" || p.category === currentCat)
+    .filter(p => productMatchesCategory(p, currentCat))
     .filter(p => (p.name + p.description + p.category).toLowerCase().includes(q))
     .sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
 
