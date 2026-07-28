@@ -30,7 +30,7 @@
     input,select{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px;outline:0;background:#fff;font-size:15px}
     .btn{border:0;border-radius:16px;padding:14px 16px;font-weight:950;cursor:pointer;background:#f4f4f5;color:#18181b;font-size:15px;text-decoration:none;text-align:center}
     .btn.primary{background:var(--red);color:#fff}.btn.green{background:#dcfce7;color:#166534}.btn.red{background:#fee2e2;color:#991b1b}.btn.dark{background:var(--dark);color:#fff}.btn.yellow{background:#fef3c7;color:#92400e}
-    .top-actions{display:flex;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+    .top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
     .stat{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}.stat span{display:block;color:var(--muted);font-size:13px;font-weight:900}.stat strong{display:block;margin-top:7px;font-size:26px}
     .search-box{margin:16px 0;display:grid;grid-template-columns:1fr auto;gap:10px}.list{display:grid;gap:12px;margin-top:14px}
     .person{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:12px}
@@ -51,7 +51,7 @@
     .modal h2{margin:0;color:var(--red)}
     .close{border:0;background:#f4f4f5;border-radius:14px;width:42px;height:42px;font-size:24px;font-weight:900;cursor:pointer}
     @media(max-width:760px){
-      body{padding:12px}header{align-items:flex-start;flex-direction:column}.grid,.stats,.search-box{grid-template-columns:1fr}
+      body{padding:12px}header{align-items:flex-start;flex-direction:column}.grid,.stats,.search-box{grid-template-columns:1fr}.top-actions .btn{flex:1;min-width:130px}
       .person-head,.subitem{grid-template-columns:1fr}.item-actions{justify-content:stretch}.item-actions .btn,.top-actions .btn{flex:1}.top-actions{width:100%}
     }
   </style>
@@ -67,10 +67,22 @@
         </div>
       </div>
       <div class="top-actions">
-        <a class="btn dark" href="index.html">Início</a>
-        <a class="btn dark" href="dono.html">Dono</a>
+        <a class="btn dark" href="./central.html">Central</a>
+        <a class="btn dark" href="./cardapio.html">Cardápio</a>
+        <a class="btn dark" href="./funcionarios.html">Funcionários</a>
+        <a class="btn dark" href="./dono.html">Dono</a>
       </div>
     </header>
+
+    <section class="card" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+        <div>
+          <h2 style="margin:0">Menu rápido</h2>
+          <p style="margin:5px 0 0">Use os botões acima ou volte para a Central para acessar todas as áreas.</p>
+        </div>
+        <a class="btn primary" href="./central.html">Voltar para a Central</a>
+      </div>
+    </section>
 
     <section class="card">
       <form id="formRegistro" class="grid">
